@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521746105544",
+    "project_id": "rain-6efa6",
+    "storage_bucket": "rain-6efa6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521746105544:android:852ef73850b3247b2591fd",
+        "android_client_info": {
+          "package_name": "com.example.rain"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV6K-RfOVU8Z_SWiOLhlbV7kxNskMl1Cs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
