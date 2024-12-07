@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--GLI ID CHE CI SONO QUA DEVONO ESSERE UGUALI AGLI ID NELL'XML DELLA BOTTOM_NAV (CARTELLA NAVIGATION)-->
+
+    <item
+        android:id="@+id/homeFragment"
+        android:title="Home"
+        android:icon="@drawable/baseline_home_24"/>
+    <item
+        android:id="@+id/containersFragment"
+        android:title="Contenitori"
+        android:icon="@drawable/baseline_hub_24"/>
+    <item
+        android:id="@+id/historyFragment"
+        android:title="Storico"
+        android:icon="@drawable/baseline_auto_graph_24"/>
+    <item
+        android:id="@+id/weatherFragment"
+        android:title="Meteo"
+        android:icon="@drawable/baseline_cloudy_snowing_24"/>
+    <item
+        android:id="@+id/tipsFragment"
+        android:title="Consigli"
+        android:icon="@drawable/baseline_book_24"/>
+
+</menu>

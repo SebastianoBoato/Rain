@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment">
+
+    <!--GLI ID CHE CI SONO QUA DEVONO ESSERE UGUALI AGLI ID NELL'XML DEL BOTTOM_NAV_MENU (CARTELLA MENU)-->
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.rain.dashboard.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/containersFragment"
+        android:name="com.example.rain.dashboard.ContainersFragment"
+        android:label="fragment_containers"
+        tools:layout="@layout/fragment_containers" />
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.rain.dashboard.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.example.rain.dashboard.WeatherFragment"
+        android:label="fragment_weather"
+        tools:layout="@layout/fragment_weather" />
+    <fragment
+        android:id="@+id/tipsFragment"
+        android:name="com.example.rain.dashboard.TipsFragment"
+        android:label="fragment_tips"
+        tools:layout="@layout/fragment_tips" />
+</navigation>

@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.Rain" parent="Base.Theme.Rain" />
+
+    <style name="App.No.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="EmptyFont" />
+
 </resources>
