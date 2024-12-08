@@ -10,7 +10,6 @@ import com.android.volley.toolbox.Volley;
 
 // QUESTA CLASSE E' LA COSA CHE VIENE CREATA PER PRIMA QUANDO SI AVVIA L'APP
 // (non è una cosa visibile all'utente o con un'interfaccia)
-
 public class Rain extends Application {
 
     // coda per le richieste API al meteo
@@ -22,7 +21,7 @@ public class Rain extends Application {
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        // crea il canale per le notifiche (se non esiste già, quindi lo fa solo la prima volta)
+        // crea il canale per le notifiche
         createNotificationChannel();
     }
 

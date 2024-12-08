@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp">
+
+    <TextView
+        android:id="@+id/weatherTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="15dp"
+        android:textSize="25sp"
+        android:text="14:00"/>
+
+    <ImageView
+        android:id="@+id/weatherIcon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/weatherTime"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/weatherCondition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/weatherIcon"
+        android:layout_marginTop="7dp"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:text="Pioggia"/>
+
+    <TextView
+        android:id="@+id/weatherPrecip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/weatherIcon"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"
+        android:textSize="20sp"
+        android:text="0.43mm"/>
+
+    <TextView
+        android:id="@+id/weatherChanceOfRain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/weatherPrecip"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginStart="7dp"
+        android:textSize="20sp"
+        android:text="(81%)"/>
+
+    <TextView
+        android:id="@+id/weatherTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="7dp"
+        android:textSize="20sp"
+        android:text="15°C"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#E0E0E0"/>
+
+</RelativeLayout>

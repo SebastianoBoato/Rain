@@ -9,6 +9,7 @@ public class NotificationUtils {
     // ID del canale (deve corrispondere a quello creato nel NotificationChannel)
     private static final String CHANNEL_ID = "weather_channel_id";
 
+    // questa funzione vuole un context come primo parametro che sia un'activity o un getApplicationContext()
     public static void sendNotification(Context context, String title, String message) {
 
         // Crea il contenuto della notifica
