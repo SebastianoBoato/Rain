@@ -55,4 +55,6 @@ dependencies {
     implementation(libs.volley)
 
     implementation (libs.recyclerview)
+
+    implementation (libs.glide)
 }

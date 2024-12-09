@@ -19,6 +19,7 @@ public class Rain extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // inizializzazione della coda
         requestQueue = Volley.newRequestQueue(getApplicationContext());
 
         // crea il canale per le notifiche

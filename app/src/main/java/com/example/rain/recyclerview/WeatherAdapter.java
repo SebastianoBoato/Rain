@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.rain.R;
 import com.example.rain.items.WeatherItem;
 
@@ -32,7 +33,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull WeatherViewHolder weatherViewHolder, int i) {
         weatherViewHolder.weatherTime.setText(weatherItems.get(i).getTime());
-        // TODO: icona da mettere
+        Glide.with(weatherViewHolder.itemView).load("https:" + weatherItems.get(i).getIconUrl()).into(weatherViewHolder.weatherIcon);
         weatherViewHolder.weatherCondition.setText(weatherItems.get(i).getCondition());
         weatherViewHolder.weatherPrecip.setText(String.format(Locale.US, "%.2fmm", weatherItems.get(i).getPrecip()));
         weatherViewHolder.weatherChanceOfRain.setText(String.format(Locale.US, "(%d%%)", weatherItems.get(i).getChanceOfRain()));

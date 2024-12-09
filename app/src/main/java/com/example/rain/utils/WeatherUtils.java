@@ -56,12 +56,13 @@ public class WeatherUtils {
 
                         JSONObject jsonObjectCondition = jsonObjectHour.getJSONObject("condition");
                         String condition = jsonObjectCondition.getString("text");
+                        String iconUrl = jsonObjectCondition.getString("icon");
 
                         double temp = jsonObjectHour.getDouble("temp_c");
                         int chanceOfRain = jsonObjectHour.getInt("chance_of_rain");
                         double precip = jsonObjectHour.getDouble("precip_mm");
 
-                        weatherItems.add(new WeatherItem(hour, condition, temp, chanceOfRain, precip));
+                        weatherItems.add(new WeatherItem(hour, condition, iconUrl, temp, chanceOfRain, precip));
                     }
 
                     callback.onSuccess(weatherItems);
