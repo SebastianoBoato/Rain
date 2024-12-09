@@ -1,30 +1,31 @@
 package com.example.rain.dashboard.weather;
 
-import static java.security.AccessController.getContext;
-
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.rain.R;
-import com.example.rain.databinding.ActivityMainBinding;
-import com.example.rain.databinding.ActivityTodayForecastBinding;
+import com.example.rain.databinding.ActivityDailyForecastBinding;
+import com.example.rain.items.HourlyWeatherItem;
 import com.example.rain.recyclerview.WeatherAdapter;
 
-public class TodayForecastActivity extends AppCompatActivity {
+import java.util.List;
 
-    private ActivityTodayForecastBinding binding;
+public class DailyForecastActivity extends AppCompatActivity {
+
+    private ActivityDailyForecastBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityTodayForecastBinding.inflate(getLayoutInflater());
+        binding = ActivityDailyForecastBinding.inflate(getLayoutInflater());
 
         setContentView(binding.getRoot());
 
@@ -35,7 +36,10 @@ public class TodayForecastActivity extends AppCompatActivity {
             return insets;
         });
 
+        // prendo la lista di meteo orario passata con l'Intent
+        List<HourlyWeatherItem> hourlyWeatherItems = getIntent().getParcelableArrayListExtra("weatherList");
+
         binding.weatherRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //binding.weatherRecyclerView.setAdapter(new WeatherAdapter(getApplicationContext(), weatherItems));
+        binding.weatherRecyclerView.setAdapter(new WeatherAdapter(getApplicationContext(), hourlyWeatherItems));
     }
 }

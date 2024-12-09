@@ -1,25 +1,25 @@
 package com.example.rain.items;
 
-public class WeatherItem {
+public class DailyWeatherItem {
 
-    private final String time;
     private final String condition;
     private final String iconUrl;
-    private final double temp;
+
+    private final double maxTemp;
+    private final double minTemp;
+    private final double avgTemp;
+
     private final int chanceOfRain;
     private final double precip;
 
-    public WeatherItem(String time, String condition, String iconUrl, double temp, int chanceOfRain, double precip) {
-        this.time = time;
+    public DailyWeatherItem(String condition, String iconUrl, double maxTemp, double minTemp, double avgTemp, int chanceOfRain, double precip) {
         this.condition = condition;
         this.iconUrl = iconUrl;
-        this.temp = temp;
+        this.maxTemp = maxTemp;
+        this.minTemp = minTemp;
+        this.avgTemp = avgTemp;
         this.chanceOfRain = chanceOfRain;
         this.precip = precip;
-    }
-
-    public String getTime() {
-        return time;
     }
 
     public String getCondition() {
@@ -30,8 +30,16 @@ public class WeatherItem {
         return iconUrl;
     }
 
-    public double getTemp() {
-        return temp;
+    public double getMaxTemp() {
+        return maxTemp;
+    }
+
+    public double getMinTemp() {
+        return minTemp;
+    }
+
+    public double getAvgTemp() {
+        return avgTemp;
     }
 
     public int getChanceOfRain() {

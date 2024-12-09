@@ -6,10 +6,247 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboard.WeatherFragment">
     
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/weatherRecyclerView"
+    <TextView
+        android:id="@+id/meteoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="15dp"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:text="Meteo"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/todayForecastFrame"
+        android:layout_width="match_parent"
+        android:layout_height="410dp"
+        app:layout_constraintTop_toBottomOf="@id/meteoTextView"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/bottom_nav_background">
+
+        <TextView
+            android:id="@+id/oggiTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Oggi"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/weatherIcon"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/oggiTextView"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/massimaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Massima"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/oggiTextView"
+            app:layout_constraintStart_toEndOf="@id/weatherIcon"/>
+        <TextView
+            android:id="@+id/weatherMaxTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="15°C"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/oggiTextView"
+            app:layout_constraintStart_toEndOf="@id/massimaTextView"/>
+
+        <TextView
+            android:id="@+id/minimaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Minima"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/massimaTextView"
+            app:layout_constraintStart_toEndOf="@id/weatherIcon"/>
+        <TextView
+            android:id="@+id/weatherMinTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="9°C"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/weatherMaxTemp"
+            app:layout_constraintStart_toEndOf="@id/minimaTextView"/>
+
+        <TextView
+            android:id="@+id/mediaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="Media"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/minimaTextView"
+            app:layout_constraintStart_toEndOf="@id/weatherIcon"/>
+        <TextView
+            android:id="@+id/weatherAvgTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="11°C"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/weatherMinTemp"
+            app:layout_constraintStart_toEndOf="@id/mediaTextView"/>
+
+        <TextView
+            android:id="@+id/weatherCondition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pioggia"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_margin="30dp"
+            app:layout_constraintTop_toBottomOf="@id/weatherIcon"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/millimetriTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Millimetri"
+            android:textSize="20sp"
+            android:layout_margin="30dp"
+            app:layout_constraintTop_toBottomOf="@id/weatherCondition"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/weatherPrecip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.87mm"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_margin="30dp"
+            app:layout_constraintTop_toBottomOf="@id/weatherCondition"
+            app:layout_constraintStart_toEndOf="@id/millimetriTextView"/>
+
+        <TextView
+            android:id="@+id/probabilitaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Probabilità"
+            android:textSize="20sp"
+            android:layout_margin="30dp"
+            app:layout_constraintTop_toBottomOf="@id/millimetriTextView"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/weatherChanceOfRain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="87%"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_margin="30dp"
+            app:layout_constraintTop_toBottomOf="@id/weatherPrecip"
+            app:layout_constraintStart_toEndOf="@id/probabilitaTextView"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tomorrowForecastFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:background="@drawable/bottom_nav_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/todayForecastFrame"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Domani"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/tomorrowWeatherIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/tomorrowWeatherPrecip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.87mm"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/afterTomorrowForecastFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_nav_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tomorrowForecastFrame"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tra 2 giorni"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/afterTomorrowWeatherIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/afterTomorrowWeatherPrecip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.87mm"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
