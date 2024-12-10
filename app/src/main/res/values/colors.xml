@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Colore nero per il testo -->
     <color name="black">#FF000000</color>
+    <!-- Colore di sfondo principale (bianco) -->
     <color name="white">#FFFFFFFF</color>
+    <!-- Colore grigio chiaro per lo sfondo dei campi di input -->
+    <color name="light_gray">#D3D3D3</color>
+    <!-- Colore blu per i pulsanti e i link -->
+    <color name="primary_blue">#2196F3</color>
+    <!-- Colore grigio chiaro di sfondo -->
+    <color name="background_gray">#FAFAFA</color>
+    <!-- Colore blu scuro per il testo del link e lo switch -->
+    <color name="blue_accent">#2196F3</color>
 </resources>

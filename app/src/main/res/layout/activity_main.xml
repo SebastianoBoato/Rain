@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".dashboard.MainActivity">
 
+    <!-- Bottone di Logout -->
+
+    <!-- <Button
+        android:id="@+id/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:backgroundTint="@color/primary_blue"
+        android:text="Logout"
+        android:textColor="@color/white"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="439dp" /> -->
+
     <fragment
         android:id="@+id/fragmentFrame"
         android:name="androidx.navigation.fragment.NavHostFragment"
