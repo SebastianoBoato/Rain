@@ -57,4 +57,9 @@ dependencies {
     implementation (libs.recyclerview)
 
     implementation (libs.glide)
+
+
+    // Aggiungi questa riga per il client di localizzazione
+    implementation("com.google.android.gms:play-services-location:18.0.0")
+
 }
