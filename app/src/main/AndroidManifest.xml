@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
@@ -18,6 +20,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".login.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".dashboard.weather.DailyForecastActivity"
             android:exported="false" />
         <activity
@@ -26,7 +35,6 @@
             android:windowSoftInputMode="adjustPan"> <!-- questo coso fa si che quando apro la tastiera non scorre tutta l'app sopra ma solo la casella di testo in cui scrivere (prima si spostava anche la navbar sopra bruttissimo) -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
