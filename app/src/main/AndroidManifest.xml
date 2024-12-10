@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".dashboard.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".dashboard.weather.DailyForecastActivity"
             android:exported="false" />
         <activity
