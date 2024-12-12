@@ -24,7 +24,9 @@
         android:layout_margin="15dp"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:text="Meteo orario"/>
+        android:text="METEO ORARIO"
+        android:textColor="@color/title_blue" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/weatherRecyclerView"

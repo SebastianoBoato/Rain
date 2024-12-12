@@ -27,6 +27,9 @@
             android:exported="false">
         </activity>
         <activity
+            android:name=".dashboard.profile.ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".dashboard.weather.DailyForecastActivity"
             android:exported="false" />
         <activity
@@ -35,6 +38,7 @@
             android:windowSoftInputMode="adjustPan"> <!-- questo coso fa si che quando apro la tastiera non scorre tutta l'app sopra ma solo la casella di testo in cui scrivere (prima si spostava anche la navbar sopra bruttissimo) -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
