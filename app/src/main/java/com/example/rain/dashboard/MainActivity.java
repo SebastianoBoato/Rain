@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     // Binding per accedere ai componenti del layout tramite View Binding.
     private ActivityMainBinding binding;
 
+    //private Button logoutButton;
+
     // Autenticazione Firebase.
     private FirebaseAuth auth;
 

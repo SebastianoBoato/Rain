@@ -180,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
                         userData.put("email", email);
                         userData.put("firstName", firstName);
                         userData.put("lastName", lastName);
-                        userData.put("password", password);
+                        //userData.put("password", password);
                         userData.put("notificationsEnabled", notificationsEnabled);
 
                         // Salva i dati aggiuntivi in Firestore

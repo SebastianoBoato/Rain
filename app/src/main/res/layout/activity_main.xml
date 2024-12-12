@@ -9,7 +9,7 @@
 
     <!-- Bottone di Logout -->
 
-    <!-- <Button
+    <!--<Button
         android:id="@+id/logout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:text="Logout"
         android:textColor="@color/white"
         tools:layout_editor_absoluteX="48dp"
-        tools:layout_editor_absoluteY="439dp" /> -->
+        tools:layout_editor_absoluteY="439dp" />-->
 
     <fragment
         android:id="@+id/fragmentFrame"
