@@ -12,4 +12,7 @@
     <color name="background_gray">#FAFAFA</color>
     <!-- Colore blu scuro per il testo del link e lo switch -->
     <color name="blue_accent">#2196F3</color>
+    <!-- Colore blu per titoli per gli errori -->
+    <color name="title_blue">#005596</color>
+
 </resources>
