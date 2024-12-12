@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboard.WeatherFragment">
-    
+
     <TextView
         android:id="@+id/meteoTextView"
         android:layout_width="wrap_content"
@@ -13,9 +13,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="15dp"
-        android:textSize="30sp"
+        android:textSize="35sp"
         android:textStyle="bold"
-        android:text="Meteo"/>
+        android:text="METEO"
+        android:textColor="@color/title_blue" />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/todayForecastFrame"
@@ -26,6 +28,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:elevation="1dp"
         android:background="@drawable/bottom_nav_background">
 
         <TextView
@@ -37,7 +40,8 @@
             android:textStyle="bold"
             android:layout_margin="20dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/title_blue" />
 
         <ImageView
             android:id="@+id/weatherIcon"
@@ -116,7 +120,8 @@
             android:textStyle="bold"
             android:layout_margin="30dp"
             app:layout_constraintTop_toBottomOf="@id/weatherIcon"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/title_blue" />
 
         <TextView
             android:id="@+id/millimetriTextView"
@@ -182,7 +187,8 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/title_blue" />
 
         <ImageView
             android:id="@+id/tomorrowWeatherIcon"
@@ -226,7 +232,8 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/title_blue" />
 
         <ImageView
             android:id="@+id/afterTomorrowWeatherIcon"

@@ -15,8 +15,13 @@ import com.example.rain.dashboard.profile.ProfileActivity;
 import com.example.rain.databinding.FragmentHomeBinding;
 import com.example.rain.databinding.FragmentWeatherBinding;
 
+/**
+ * Fragment che gestisce la schermata principale dell'app.
+ * Può includere informazioni generali, aggiornamenti meteo, o collegamenti rapidi ad altre sezioni.
+ */
 public class HomeFragment extends Fragment {
 
+    // Variabile per mantenere il riferimento alla vista radice del layout del Fragment.
     View view;
     private FragmentHomeBinding binding;
 
@@ -34,7 +39,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        return view;
+        return view; // Restituisce la vista radice del Fragment.
     }
 
     @Override
