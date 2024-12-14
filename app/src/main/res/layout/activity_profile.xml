@@ -19,7 +19,7 @@
             android:layout_marginTop="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="Torna indietro"
-            android:src="@drawable/ic_arrow_back"
+            android:src="@drawable/baseline_arrow_back_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

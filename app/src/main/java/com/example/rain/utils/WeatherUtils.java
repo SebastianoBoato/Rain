@@ -2,6 +2,8 @@ package com.example.rain.utils;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -9,6 +11,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.rain.Rain;
 import com.example.rain.items.DailyWeatherItem;
 import com.example.rain.items.HourlyWeatherItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,10 +23,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class WeatherUtils {
-
-    // TODO: bisognerebbe prendere la location dal database, per adesso comunque dovresti dare la possibilità di inserirla manualmente tipo app del meteo
 
     // ORDINE: baseUrl + forecast/current + key + city + days + other
 
@@ -131,5 +137,38 @@ public class WeatherUtils {
         double precip = jsonObjectDay.getDouble("totalprecip_mm");
 
         return new DailyWeatherItem(condition, iconUrl, maxTemp, minTemp, avgTemp, chanceOfRain, precip);
+    }
+
+    public static void getLocation(FirebaseFirestore db, FirebaseUser user, OneElementCallback<String> callback) {
+
+        String userId = user.getUid();
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Map<String, Object> location = (Map<String, Object>) documentSnapshot.get("location");
+                        if (location.containsKey("latitude") && location.containsKey("longitude")) {
+                            double lat = (double) location.get("latitude");
+                            double lon = (double) location.get("longitude");
+                            callback.onSuccess(lat + "," + lon);
+                        }
+                        else if (location.containsKey("city")) {
+                            callback.onSuccess((String) location.get("city") + ",Italy");
+                        }
+                        else if (location.containsKey("province")) {
+                            callback.onSuccess((String) location.get("province") + ",Italy");
+                        }
+                        else {
+                            callback.onError("Località non trovata");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onError("Località non trovata");
+                    }
+                });
     }
 }
