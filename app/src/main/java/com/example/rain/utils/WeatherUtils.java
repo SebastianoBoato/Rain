@@ -225,8 +225,9 @@ public class WeatherUtils {
         double containerCurrentVolume = document.getDouble("currentVolume");
         double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
         double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
+        String containerShape = document.getString("shape");
 
-        fillingPredictionItems.add(new FillingPredictionItem(containerName, containerTotalVolume, containerCurrentVolume, containerVolumeIncrease, containerPredictionVolume));
+        fillingPredictionItems.add(new FillingPredictionItem(containerName, containerTotalVolume, containerCurrentVolume, containerVolumeIncrease, containerPredictionVolume, containerShape));
     }
 
     public static void autoFillContainers (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather) {

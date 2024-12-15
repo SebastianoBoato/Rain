@@ -78,7 +78,7 @@
             android:id="@+id/currentTotalVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="782.3L"
+            android:text="0.0L"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginStart="15dp"

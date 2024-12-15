@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.rain.R;
 import com.example.rain.items.FillingPredictionItem;
 
@@ -36,7 +37,15 @@ public class PredictionAdapter extends RecyclerView.Adapter<PredictionViewHolder
         holder.containerCurrentVolume.setText(String.format(Locale.US, "%.1fL", fillingPredictionItems.get(i).getContainerCurrentVolume()));
         holder.containerVolumeIncrease.setText(String.format(Locale.US, "%.1fL", fillingPredictionItems.get(i).getContainerVolumeIncrease()));
         holder.containerPredictionVolume.setText(String.format(Locale.US, "%.1fL", fillingPredictionItems.get(i).getContainerPredictionVolume()));
-        //TODO: container shape
+
+        //TODO: aggiungere le immagini per le altre due forme
+        String shape = fillingPredictionItems.get(i).getContainerShape();
+        if (shape.equals("Rettangolo") || shape.equals("Quadrato")) {
+            holder.containerShape.setImageResource(R.drawable.square_icon);
+        }
+        else if (shape.equals("Cerchio") || shape.equals("Ellisse")) {
+            holder.containerShape.setImageResource(R.drawable.circle_icon);
+        }
     }
 
     @Override
