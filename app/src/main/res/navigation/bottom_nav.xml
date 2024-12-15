@@ -13,9 +13,10 @@
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/containersFragment"
-        android:name="com.example.rain.dashboard.ContainersFragment"
+        android:name="com.example.rain.dashboard.container.ContainersFragment"
         android:label="fragment_containers"
-        tools:layout="@layout/fragment_containers" />
+        tools:layout="@layout/fragment_containers">
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.example.rain.dashboard.HistoryFragment"
