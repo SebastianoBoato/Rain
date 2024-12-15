@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.example.rain.dashboard.weather.DailyForecastActivity;
+import com.example.rain.dashboard.weather.FillingPredictionActivity;
 import com.example.rain.databinding.FragmentWeatherBinding;
 import com.example.rain.items.DailyWeatherItem;
 import com.example.rain.items.HourlyWeatherItem;
@@ -44,13 +45,13 @@ public class WeatherFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         // devo usare questi trick power con le anonymous class Callback perché in realtà tutto quello che faccio lo posso fare solo dopo la risposta dei listener
+        // cioè i dati del database ce li avrò nel listener della query, i dati del meteo nel listener della chiamata API
 
         WeatherUtils.getLocation(db, user, new OneElementCallback<String>() {
-
             @Override
-            public void onSuccess(String element) {
+            public void onSuccess(String location) {
 
-                WeatherUtils.getWeatherDetails(view, element /*location*/, new WeatherCallback() {
+                WeatherUtils.getWeatherDetails(location, new WeatherCallback() {
                     @Override
                     public void onSuccess(List<HourlyWeatherItem> hourlyWeatherItemsToday,
                                           List<HourlyWeatherItem> hourlyWeatherItemsTomorrow,
@@ -58,7 +59,6 @@ public class WeatherFragment extends Fragment {
                                           DailyWeatherItem todayWeather,
                                           DailyWeatherItem tomorrowWeather,
                                           DailyWeatherItem afterTomorrowWeather) {
-                        Snackbar.make(view, element, Snackbar.LENGTH_LONG).show();
 
                         // imposto il frame di oggi
                         binding.weatherCondition.setText(todayWeather.getCondition());
@@ -103,6 +103,15 @@ public class WeatherFragment extends Fragment {
                                 ArrayList<HourlyWeatherItem> hourlyWeatherItemsAfterTomorrowArrayList = new ArrayList<>(hourlyWeatherItemsAfterTomorrow);
                                 Intent intent = new Intent(getActivity(), DailyForecastActivity.class);
                                 intent.putParcelableArrayListExtra("weatherList", hourlyWeatherItemsAfterTomorrowArrayList);
+                                startActivity(intent);
+                            }
+                        });
+
+                        binding.fillingEstimate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getActivity(), FillingPredictionActivity.class);
+                                intent.putExtra("todayWeather", todayWeather);
                                 startActivity(intent);
                             }
                         });

@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FirebaseUser user = auth.getCurrentUser();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private FirebaseFirestore db;
     private ActivityProfileBinding binding;
 
     private boolean isEditing = false; // Per tenere traccia dello stato di modifica
@@ -43,6 +43,10 @@ public class ProfileActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
 
         // Controlla se l'utente è autenticato
         if (user != null) {
@@ -104,10 +108,10 @@ public class ProfileActivity extends AppCompatActivity {
                                 Double latitude = (Double) location.get("latitude");
                                 Double longitude = (Double) location.get("longitude");
 
-                                binding.addressValue.setText(address != null ? address : "N/A");
-                                binding.cityValue.setText(city != null ? city : "N/A");
-                                binding.provinceValue.setText(province != null ? province : "N/A");
-                                binding.postalCodeValue.setText(postalCode != null ? postalCode : "N/A");
+                                binding.addressValue.setText(String.format("Indirizzo: %s", address != null ? address : "N/A"));
+                                binding.cityValue.setText(String.format("Città: %s", city != null ? city : "N/A"));
+                                binding.provinceValue.setText(String.format("Provincia: %s", province != null ? province : "N/A"));
+                                binding.postalCodeValue.setText(String.format("Codice postale: %s", postalCode != null ? postalCode : "N/A"));
                                 binding.coordinatesValue.setText((latitude != null && longitude != null) ?
                                         "Lat: " + latitude + ", Lon: " + longitude : "N/A");
                             }

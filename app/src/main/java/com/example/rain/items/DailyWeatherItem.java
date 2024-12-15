@@ -1,6 +1,9 @@
 package com.example.rain.items;
 
-public class DailyWeatherItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class DailyWeatherItem implements Parcelable {
 
     private final String condition;
     private final String iconUrl;
@@ -49,4 +52,45 @@ public class DailyWeatherItem {
     public double getPrecip() {
         return precip;
     }
+
+
+    // tutta sta cosa sotto serve per renderla passabile tra attività diverse
+
+    protected DailyWeatherItem(Parcel in) {
+        condition = in.readString();
+        iconUrl = in.readString();
+        maxTemp = in.readDouble();
+        minTemp = in.readDouble();
+        avgTemp = in.readDouble();
+        chanceOfRain = in.readInt();
+        precip = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(condition);
+        dest.writeString(iconUrl);
+        dest.writeDouble(maxTemp);
+        dest.writeDouble(minTemp);
+        dest.writeDouble(avgTemp);
+        dest.writeInt(chanceOfRain);
+        dest.writeDouble(precip);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<DailyWeatherItem> CREATOR = new Creator<DailyWeatherItem>() {
+        @Override
+        public DailyWeatherItem createFromParcel(Parcel in) {
+            return new DailyWeatherItem(in);
+        }
+
+        @Override
+        public DailyWeatherItem[] newArray(int size) {
+            return new DailyWeatherItem[size];
+        }
+    };
 }

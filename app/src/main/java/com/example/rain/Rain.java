@@ -1,12 +1,18 @@
 package com.example.rain;
 
+import android.app.AlarmManager;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Build;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.example.rain.broadcast.AutoFillContainersBroadcastReceiver;
 
 // QUESTA CLASSE E' LA COSA CHE VIENE CREATA PER PRIMA QUANDO SI AVVIA L'APP
 // (non è una cosa visibile all'utente o con un'interfaccia)
@@ -24,6 +30,9 @@ public class Rain extends Application {
 
         // crea il canale per le notifiche
         createNotificationChannel();
+
+        // imposta il riempimento automatico dei container in base alla pioggia caduta
+        setupAutoFillContainersAlarm();
     }
 
     public static RequestQueue getRequestQueue() {
@@ -45,6 +54,30 @@ public class Rain extends Application {
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);
             }
+        }
+    }
+
+    private void setupAutoFillContainersAlarm() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), AutoFillContainersBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // Imposta l'allarme ripetuto
+        if (alarmManager != null) {
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent
+            );
         }
     }
 }

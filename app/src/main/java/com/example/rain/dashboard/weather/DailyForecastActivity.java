@@ -38,7 +38,7 @@ public class DailyForecastActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
 
         // Imposta i margini di padding per rispettare le barre di sistema (status bar e navigation bar).
-        ViewCompat.setOnApplyWindowInsetsListener(binding.todayForecast, (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.dailyForecast, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;

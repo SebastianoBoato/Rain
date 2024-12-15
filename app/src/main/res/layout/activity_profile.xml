@@ -180,14 +180,14 @@
             android:text="Logout" />
 
         <!-- Bottone Elimina Account -->
-        <Button
+        <!--Button
             android:id="@+id/deleteAccountButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="Elimina Account"
             android:backgroundTint="@android:color/holo_red_light"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white" /-->
 
     </LinearLayout>
 
