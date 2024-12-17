@@ -11,10 +11,10 @@
         android:id="@+id/containersFragment"
         android:title="Contenitori"
         android:icon="@drawable/baseline_hub_24"/>
-    <item
+    <!--item
         android:id="@+id/historyFragment"
         android:title="Storico"
-        android:icon="@drawable/baseline_auto_graph_24"/>
+        android:icon="@drawable/baseline_auto_graph_24"/-->
     <item
         android:id="@+id/weatherFragment"
         android:title="Meteo"

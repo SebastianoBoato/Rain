@@ -6,14 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboard.HomeFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="HOME FRAGMENT" />
 
     <ImageView
         android:id="@+id/profileImage"
@@ -21,8 +13,207 @@
         android:layout_height="70dp"
         android:src="@drawable/ic_profile"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="30dp"
-        android:contentDescription="Profile Image"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="25dp"
+        android:contentDescription="Profile Image"
+        android:background="@drawable/bottom_nav_background"
+        android:padding="10dp"/>
+
+    <TextView
+        android:id="@+id/buongiornoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/profileImage"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintBottom_toBottomOf="@id/profileImage"
+        android:layout_margin="20dp"
+        android:textSize="20sp"
+        android:text="Buongiorno, " />
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/buongiornoTextView"
+        app:layout_constraintStart_toEndOf="@id/buongiornoTextView"
+        app:layout_constraintBottom_toBottomOf="@id/buongiornoTextView"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Utente" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/waterSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_nav_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profileImage"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/laTuaAcquaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="La tua acqua"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/title_blue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/quantitaAttualeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantità attuale"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/laTuaAcquaTextView"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/currentTotalVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.0L"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/quantitaAttualeTextView"
+            app:layout_constraintTop_toBottomOf="@id/laTuaAcquaTextView"/>
+
+        <TextView
+            android:id="@+id/quantitaTotaleRaccoltaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantità totale raccolta"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/quantitaAttualeTextView"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/lifetimeCollectedVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3994.4L"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toEndOf="@id/quantitaTotaleRaccoltaTextView"
+            app:layout_constraintTop_toBottomOf="@id/currentTotalVolume"/>
+
+        <TextView
+            android:id="@+id/quantitaTotaleUsataTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantità totale usata"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/quantitaTotaleRaccoltaTextView"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/lifetimeUsedVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2669.1L"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toEndOf="@id/quantitaTotaleUsataTextView"
+            app:layout_constraintTop_toBottomOf="@id/lifetimeCollectedVolume"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weatherSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_nav_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/waterSummary"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/meteoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Meteo"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/title_blue"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <ImageView
+            android:id="@+id/todayWeatherIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/meteoTextView"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Oggi"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/todayWeatherIcon"
+            app:layout_constraintStart_toStartOf="@id/todayWeatherIcon"
+            app:layout_constraintEnd_toEndOf="@id/todayWeatherIcon"/>
+
+        <ImageView
+            android:id="@+id/tomorrowWeatherIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/meteoTextView"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Domani"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/tomorrowWeatherIcon"
+            app:layout_constraintStart_toStartOf="@id/tomorrowWeatherIcon"
+            app:layout_constraintEnd_toEndOf="@id/tomorrowWeatherIcon"/>
+
+        <ImageView
+            android:id="@+id/afterTomorrowWeatherIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintTop_toBottomOf="@id/meteoTextView"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tra 2 giorni"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            app:layout_constraintTop_toBottomOf="@id/afterTomorrowWeatherIcon"
+            app:layout_constraintStart_toStartOf="@id/afterTomorrowWeatherIcon"
+            app:layout_constraintEnd_toEndOf="@id/afterTomorrowWeatherIcon"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

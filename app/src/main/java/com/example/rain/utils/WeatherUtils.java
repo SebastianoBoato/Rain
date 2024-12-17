@@ -1,6 +1,6 @@
 package com.example.rain.utils;
 
-import android.view.View;
+import androidx.annotation.NonNull;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -8,7 +8,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.rain.Rain;
 import com.example.rain.items.DailyWeatherItem;
+import com.example.rain.items.FillingPredictionItem;
 import com.example.rain.items.HourlyWeatherItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,10 +26,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class WeatherUtils {
-
-    // TODO: bisognerebbe prendere la location dal database, per adesso comunque dovresti dare la possibilità di inserirla manualmente tipo app del meteo
 
     // ORDINE: baseUrl + forecast/current + key + city + days + other
 
@@ -27,19 +36,19 @@ public class WeatherUtils {
     private final static String key = "4d9c1c64ddaa4009926173617241911"; // ?key=
     private final static String other = "&aqi=no&alerts=no";
     // per la location va anche bene scrivere 43.22686,81.4542 dove la prima è latitudine e la seconda longitudine
-    // weatherState può essere current o forecast
 
-    public static void getWeatherDetails(View view, String city, WeatherCallback callback) {
+    // I dettagli del meteo vengono passati al WeatherCallback
+    public static void getWeatherDetails(String location, WeatherCallback callback) {
 
-        String tempUrl = baseUrl + "/forecast.json" + "?key=" + key + "&q=" + city + "&days=3" + other;
+        String tempUrl = baseUrl + "/forecast.json" + "?key=" + key + "&q=" + location + "&days=3" + other;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, tempUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    List<HourlyWeatherItem> hourlyWeatherItemsToday = new ArrayList<>();
-                    List<HourlyWeatherItem> hourlyWeatherItemsTomorrow = new ArrayList<>();
-                    List<HourlyWeatherItem> hourlyWeatherItemsAfterTomorrow = new ArrayList<>();
+                    List<HourlyWeatherItem> hourlyWeatherItemsToday;
+                    List<HourlyWeatherItem> hourlyWeatherItemsTomorrow;
+                    List<HourlyWeatherItem> hourlyWeatherItemsAfterTomorrow;
                     DailyWeatherItem todayWeather, tomorrowWeather, afterTomorrowWeather;
 
                     // arrivo fino alla lista dei 3 giorni
@@ -131,5 +140,124 @@ public class WeatherUtils {
         double precip = jsonObjectDay.getDouble("totalprecip_mm");
 
         return new DailyWeatherItem(condition, iconUrl, maxTemp, minTemp, avgTemp, chanceOfRain, precip);
+    }
+
+    // La location viene passata al OneElementCallback<String>
+    public static void getLocation(FirebaseFirestore db, FirebaseUser user, OneElementCallback<String> callback) {
+
+        String userId = user.getUid();
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> location = (Map<String, Object>) documentSnapshot.get("location");
+                            if (location.containsKey("latitude") && location.containsKey("longitude")) {
+                                double lat = (double) location.get("latitude");
+                                double lon = (double) location.get("longitude");
+                                callback.onSuccess(lat + "," + lon);
+                            }
+                            else if (location.containsKey("city")) {
+                                callback.onSuccess((String) location.get("city") + ",Italy");
+                            }
+                            else if (location.containsKey("province")) {
+                                callback.onSuccess((String) location.get("province") + ",Italy");
+                            }
+                            else {
+                                callback.onError("Località non trovata");
+                            }
+                        }
+                        else {
+                            callback.onError("L'utente non esiste");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onError("Errore nella connessione al server");
+                    }
+                });
+    }
+
+    public static void getFillingPredictions (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather, OneElementCallback< List<FillingPredictionItem> > callback) {
+
+        String userId = user.getUid();
+        List<FillingPredictionItem> fillingPredictionItems = new ArrayList<>();
+
+        db.collection("users").document(userId)
+                .collection("containers").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                addFillingPredictionItem(fillingPredictionItems, todayWeather, document);
+                            }
+                            callback.onSuccess(fillingPredictionItems);
+                        }
+                        else {
+                            callback.onError("Nessun contenitore trovato");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onError("Errore nella connessione al server: " + e.getMessage());
+                    }
+                });
+    }
+
+    private static void addFillingPredictionItem (List<FillingPredictionItem> fillingPredictionItems, DailyWeatherItem todayWeather, QueryDocumentSnapshot document) {
+
+        double area;
+        if (document.get("roofArea") != null) {
+            area = document.getDouble("roofArea");
+        }
+        else {
+            area = document.getDouble("baseArea");
+        }
+
+        String containerName = document.getString("name");
+        double containerTotalVolume = document.getDouble("totalVolume");
+        double containerCurrentVolume = document.getDouble("currentVolume");
+        double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
+        double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
+        String containerShape = document.getString("shape");
+
+        fillingPredictionItems.add(new FillingPredictionItem(containerName, containerTotalVolume, containerCurrentVolume, containerVolumeIncrease, containerPredictionVolume, containerShape));
+    }
+
+    public static void autoFillContainers (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather) {
+
+        String userId = user.getUid();
+
+        CollectionReference containersRef = db.collection("users").document(userId).collection("containers");
+
+        containersRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+
+                                double area = document.getDouble( document.get("roofArea") != null ? "roofArea" : "baseArea" );
+                                double containerTotalVolume = document.getDouble("totalVolume");
+                                double containerCurrentVolume = document.getDouble("currentVolume");
+                                double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
+                                double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
+
+                                DocumentReference containerDocRef = containersRef.document(document.getId());
+                                if (containerPredictionVolume <= containerTotalVolume) {
+                                    containerDocRef.update("currentVolume", containerPredictionVolume);
+                                }
+                                else {
+                                    containerDocRef.update("currentVolume", containerTotalVolume);
+                                }
+                            }
+                        }
+                    }
+                });
     }
 }

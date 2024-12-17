@@ -21,7 +21,7 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
         weatherTime = itemView.findViewById(R.id.weatherTime);
         weatherCondition = itemView.findViewById(R.id.weatherCondition);
         weatherPrecip = itemView.findViewById(R.id.weatherPrecip);
-        weatherChanceOfRain= itemView.findViewById(R.id.weatherChanceOfRain);
+        weatherChanceOfRain = itemView.findViewById(R.id.weatherChanceOfRain);
         weatherTemp = itemView.findViewById(R.id.weatherTemp);
         weatherIcon = itemView.findViewById(R.id.weatherIcon);
     }
