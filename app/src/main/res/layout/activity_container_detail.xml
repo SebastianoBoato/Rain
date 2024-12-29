@@ -80,6 +80,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Area del tetto"
+            android:visibility="gone"
             android:textSize="16sp"
             android:layout_below="@id/height"
             android:layout_marginTop="8dp"/>
@@ -114,12 +115,22 @@
             android:layout_below="@id/totalVolume"
             android:layout_marginTop="8dp"/>
 
+        <!-- Quantità attuale -->
+        <TextView
+            android:id="@+id/currentQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quantità attuale"
+            android:textSize="16sp"
+            android:layout_below="@id/currentVolume"
+            android:layout_marginTop="8dp"/>
+
         <!-- Pulsante per modificare -->
         <Button
             android:id="@+id/editButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Modifica"
+            android:text="Modifica Nome"
             android:layout_below="@id/currentVolume"
             android:layout_marginTop="16dp"
             android:gravity="center"/>

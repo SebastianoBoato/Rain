@@ -1,7 +1,9 @@
 package com.example.rain.dashboard.container;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +18,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.rain.R;
+import com.example.rain.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -51,6 +55,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
         TextView areaTextView = findViewById(R.id.baseArea);
         TextView totalVolumeTextView = findViewById(R.id.totalVolume);
         TextView currentVolumeTextView = findViewById(R.id.currentVolume);
+        TextView currentQuantityTextView = findViewById(R.id.currentQuantity);
 
         editButton = findViewById(R.id.editButton);
         deleteButton = findViewById(R.id.deleteButton);
@@ -66,13 +71,17 @@ public class ContainerDetailActivity extends AppCompatActivity {
         if (container != null) {
             nameTextView.setText("Nome: " + container.getName());
             shapeTextView.setText("Forma: " + container.getShape());
-            param1TextView.setText("Parametro 1: " + container.getParam1());
-            param2TextView.setText(container.getParam2() != null ? "Parametro 2: " + container.getParam2() : "Parametro 2: Non applicabile");
-            heightTextView.setText("Altezza: " + container.getHeight());
-            roofAreaTextView.setText("Area del tetto: " + container.getRoofArea());
-            areaTextView.setText("Area di base: " + container.getBaseArea());
-            totalVolumeTextView.setText("Volume totale: " + container.getTotalVolume());
-            currentVolumeTextView.setText("Volume attuale: " + container.getCurrentVolume());
+            param1TextView.setText("Parametro 1: " + container.getParam1() + " cm");
+            param2TextView.setText(container.getParam2() != null ? "Parametro 2: " + container.getParam2() + " cm" : "Parametro 2: Non esistente");
+            heightTextView.setText("Altezza: " + container.getHeight() + " cm");
+            if(container.getRoofArea() != null){
+                roofAreaTextView.setVisibility(View.VISIBLE);
+            }
+            roofAreaTextView.setText("Area del tetto: " + container.getRoofArea() + " m");
+            areaTextView.setText("Area di base: " + container.getBaseArea() + " cm");
+            totalVolumeTextView.setText("Volume totale: " + container.getTotalVolume() + " cm\u00B3");
+            currentVolumeTextView.setText("Volume attuale: " + container.getCurrentVolume() + " cm\u00B3");
+            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume()/1000 + " L");
         }
 
         // Pulsante per modificare
@@ -90,31 +99,23 @@ public class ContainerDetailActivity extends AppCompatActivity {
     private void showEditDialog(Container container) {
         // Crea un AlertDialog con EditText per modificare i dati
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Modifica Contenitore");
+        builder.setTitle("Modifica Nome Contenitore");
 
         // Layout per il dialog
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_container, null);
         builder.setView(dialogView);
 
         EditText nameEditText = dialogView.findViewById(R.id.nameEditText);
-        EditText volumeEditText = dialogView.findViewById(R.id.volumeEditText);
 
         // Imposta i valori iniziali
         nameEditText.setText(container.getName());
-        volumeEditText.setText(String.format(Locale.getDefault(), "%.2f", container.getCurrentVolume()));
 
         builder.setPositiveButton("Salva", (dialog, which) -> {
             String newName = nameEditText.getText().toString();
-            String newVolumeStr = volumeEditText.getText().toString();
-
-            if (!newName.isEmpty() && !newVolumeStr.isEmpty()) {
-                // Converte il volume in Double, se necessario
-                Double newVolume = Double.parseDouble(newVolumeStr);
+            if (!newName.isEmpty()) {
                 // Aggiorna i dati nel database
-                updateContainer(container.getId(), newName, newVolume);
-                // Aggiorna i dati nell'interfaccia utente
-                nameTextView.setText(newName);
-                currentVolumeTextView.setText(String.format(Locale.getDefault(), "%.2f", newVolume));
+                updateContainer(container.getId(), newName);
+                dialog.dismiss();
             } else {
                 Toast.makeText(ContainerDetailActivity.this, "Compila tutti i campi", Toast.LENGTH_SHORT).show();
             }
@@ -128,27 +129,45 @@ public class ContainerDetailActivity extends AppCompatActivity {
     }
 
     // Metodo per aggiornare il contenitore nel database Firebase
-    private void updateContainer(String containerId, String newName, Double newVolume) {
+    private void updateContainer(String containerId, String newName) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Ottieni il documento del contenitore
+        if (user == null) {
+            Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
+            // Reindirizza alla schermata di login
+            Intent loginIntent = new Intent(this, LoginActivity.class); // Sostituisci LoginActivity con il nome della tua attività di login
+            startActivity(loginIntent);
+            finish(); // Termina l'attività corrente per impedire il ritorno a questa schermata
+            return;
+        }
+
+        if (containerId == null || containerId.isEmpty()) {
+            Toast.makeText(this, "Errore: ID del contenitore non valido.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (newName == null || newName.isEmpty()) {
+            Toast.makeText(this, "Errore: Nome del contenitore non valido.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Percorso: users/{userId}/containers/{containerId}
         DocumentReference containerRef = db.collection("users")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .document(user.getUid()) // Documento dell'utente autenticato
                 .collection("containers")
                 .document(containerId);
 
-        // Crea una mappa dei nuovi dati da aggiornare
-        Map<String, Object> updatedData = new HashMap<>();
-        updatedData.put("name", newName);
-        updatedData.put("currentVolume", newVolume);
-
-        // Aggiorna i dati nel database
-        containerRef.update(updatedData)
+        // Aggiorna il campo 'name' nel documento del contenitore
+        containerRef.update("name", newName)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(ContainerDetailActivity.this, "Contenitore aggiornato", Toast.LENGTH_SHORT).show();
+                    // Aggiorna correttamente la TextView
+                    nameTextView.setText(newName); // Assicurati che la TextView venga aggiornata correttamente
+                    Toast.makeText(this, "Contenitore aggiornato con successo", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(ContainerDetailActivity.this, "Errore nell'aggiornamento: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("Firestore", "Errore nell'aggiornamento del contenitore: ", e);
+                    Toast.makeText(this, "Errore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
