@@ -23,8 +23,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -232,31 +235,55 @@ public class WeatherUtils {
 
     public static void autoFillContainers (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather) {
 
+        // TODO: magari manda una notifica se qualcosa non va a buon fine
+
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // I mesi partono da 0
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String currentDate = day + "/" + month + "/" + year;
+
         String userId = user.getUid();
 
         CollectionReference containersRef = db.collection("users").document(userId).collection("containers");
+        CollectionReference collection_historyRef = db.collection("users").document(userId).collection("collection_history");
 
         containersRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
 
-                                double area = document.getDouble( document.get("roofArea") != null ? "roofArea" : "baseArea" );
-                                double containerTotalVolume = document.getDouble("totalVolume");
-                                double containerCurrentVolume = document.getDouble("currentVolume");
-                                double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
-                                double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
+                        Map<String, Object> collectedVolume = new HashMap<>();
+                        collectedVolume.put("date", currentDate);
+                        collectedVolume.put("collectedVolume", 0);
+                        collection_historyRef.add(collectedVolume).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference collectedVolumeDocRef) {
+                                double totalCollectedVolume = 0;
 
-                                DocumentReference containerDocRef = containersRef.document(document.getId());
-                                if (containerPredictionVolume <= containerTotalVolume) {
-                                    containerDocRef.update("currentVolume", containerPredictionVolume);
-                                }
-                                else {
-                                    containerDocRef.update("currentVolume", containerTotalVolume);
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+
+                                        //TODO: sistemare con le unità di misura corrette
+
+                                        double area = document.getDouble( document.get("roofArea") != null ? "roofArea" : "baseArea" );
+                                        double containerTotalVolume = document.getDouble("totalVolume");
+                                        double containerCurrentVolume = document.getDouble("currentVolume");
+                                        double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
+                                        double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
+
+                                        // rendo i valori reali in base alla capienza del contenitore
+                                        containerPredictionVolume = Math.min(containerPredictionVolume, containerTotalVolume);
+                                        containerVolumeIncrease = containerPredictionVolume - containerCurrentVolume;
+                                        totalCollectedVolume += containerVolumeIncrease;
+
+                                        DocumentReference containerDocRef = containersRef.document(document.getId());
+                                        containerDocRef.update("currentVolume", containerPredictionVolume);
+
+                                        collectedVolumeDocRef.update("collectedVolume", totalCollectedVolume);
+                                    }
                                 }
                             }
-                        }
+                        });
                     }
                 });
     }
