@@ -110,8 +110,10 @@ public class WeatherFragment extends Fragment {
                         binding.fillingEstimate.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                ArrayList<HourlyWeatherItem> hourlyWeatherItemsTodayArrayList = new ArrayList<>(hourlyWeatherItemsToday);
                                 Intent intent = new Intent(getActivity(), FillingPredictionActivity.class);
                                 intent.putExtra("todayWeather", todayWeather);
+                                intent.putExtra("hourlyWeather", hourlyWeatherItemsTodayArrayList);
                                 startActivity(intent);
                             }
                         });

@@ -9,6 +9,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.rain.Rain;
 import com.example.rain.items.DailyWeatherItem;
 import com.example.rain.items.FillingPredictionItem;
+import com.example.rain.items.HourlyFillingPredictionItem;
 import com.example.rain.items.HourlyWeatherItem;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -184,7 +185,7 @@ public class WeatherUtils {
                 });
     }
 
-    public static void getFillingPredictions (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather, OneElementCallback< List<FillingPredictionItem> > callback) {
+    public static void getFillingPredictions (FirebaseFirestore db, FirebaseUser user, List<HourlyWeatherItem> hourlyWeatherItems, OneElementCallback< List<FillingPredictionItem> > callback) {
 
         String userId = user.getUid();
         List<FillingPredictionItem> fillingPredictionItems = new ArrayList<>();
@@ -196,7 +197,7 @@ public class WeatherUtils {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                addFillingPredictionItem(fillingPredictionItems, todayWeather, document);
+                                addFillingPredictionItem(fillingPredictionItems, hourlyWeatherItems, document);
                             }
                             callback.onSuccess(fillingPredictionItems);
                         }
@@ -213,22 +214,34 @@ public class WeatherUtils {
                 });
     }
 
-    private static void addFillingPredictionItem (List<FillingPredictionItem> fillingPredictionItems, DailyWeatherItem todayWeather, QueryDocumentSnapshot document) {
+    private static void addFillingPredictionItem (List<FillingPredictionItem> fillingPredictionItems, List<HourlyWeatherItem> hourlyWeatherItems, QueryDocumentSnapshot document) {
+
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
         double area;
         if (document.get("roofArea") != null) {
-            area = document.getDouble("roofArea");
+            area = document.getDouble("roofArea") * 10000;
         }
         else {
             area = document.getDouble("baseArea");
         }
 
         String containerName = document.getString("name");
-        double containerTotalVolume = document.getDouble("totalVolume");
-        double containerCurrentVolume = document.getDouble("currentVolume");
-        double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
-        double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
         String containerShape = document.getString("shape");
+        double containerTotalVolume = document.getDouble("totalVolume") / 1000;
+        double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
+
+        double containerPredictionVolume = containerCurrentVolume;
+        for (HourlyWeatherItem item : hourlyWeatherItems) {
+            if (Integer.parseInt(item.getTime().substring(0, 2)) >= hour ) {
+                containerPredictionVolume += ( (item.getPrecip() / 10) * area ) / 1000;
+            }
+        }
+
+        // rendo i valori reali in base alla capienza del contenitore
+        containerPredictionVolume = Math.min(containerPredictionVolume, containerTotalVolume);
+        double containerVolumeIncrease = containerPredictionVolume - containerCurrentVolume;
 
         fillingPredictionItems.add(new FillingPredictionItem(containerName, containerTotalVolume, containerCurrentVolume, containerVolumeIncrease, containerPredictionVolume, containerShape));
     }
@@ -263,12 +276,17 @@ public class WeatherUtils {
                                 if (!queryDocumentSnapshots.isEmpty()) {
                                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
 
-                                        //TODO: sistemare con le unità di misura corrette
+                                        double area;
+                                        if (document.get("roofArea") != null) {
+                                            area = document.getDouble("roofArea") * 10000;
+                                        }
+                                        else {
+                                            area = document.getDouble("baseArea");
+                                        }
 
-                                        double area = document.getDouble( document.get("roofArea") != null ? "roofArea" : "baseArea" );
-                                        double containerTotalVolume = document.getDouble("totalVolume");
-                                        double containerCurrentVolume = document.getDouble("currentVolume");
-                                        double containerVolumeIncrease = 1000 * area * ( todayWeather.getPrecip() / 1000 );
+                                        double containerTotalVolume = document.getDouble("totalVolume") / 1000;
+                                        double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
+                                        double containerVolumeIncrease = ( area * (todayWeather.getPrecip() / 10) ) / 1000;
                                         double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
 
                                         // rendo i valori reali in base alla capienza del contenitore
@@ -284,6 +302,40 @@ public class WeatherUtils {
                                 }
                             }
                         });
+                    }
+                });
+    }
+
+    public static void getArea(FirebaseFirestore db, FirebaseUser user, String containerName, OneElementCallback<Double> callback) {
+
+        String userId = user.getUid();
+
+        db.collection("users").document(userId)
+                .collection("containers")
+                .whereEqualTo("name", containerName).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                            double area;
+                            if (documentSnapshot.get("roofArea") != null) {
+                                area = documentSnapshot.getDouble("roofArea") * 10000;
+                            }
+                            else {
+                                area = documentSnapshot.getDouble("baseArea");
+                            }
+                            callback.onSuccess(area);
+                        }
+                        else {
+                            callback.onError("Errore nella ricerca del container");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onError("Container non trovato");
                     }
                 });
     }
