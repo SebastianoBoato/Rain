@@ -1,38 +1,29 @@
 package com.example.rain.dashboard.container;
 
-import android.content.Intent;
+import static java.security.AccessController.getContext;
+
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import androidx.fragment.app.Fragment;
-
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rain.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-/**
- * Fragment che gestisce la schermata dedicata ai contenitori.
- * Viene utilizzato per mostrare o interagire con i serbatoi registrati dall'utente.
- */
-public class ContainersFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SelectContainerActivity extends AppCompatActivity {
 
     // Variabile per mantenere il riferimento alla vista radice del layout del Fragment.
     View view;
@@ -43,48 +34,35 @@ public class ContainersFragment extends Fragment {
     private FirebaseFirestore db;
     private String userId;
 
-    /**
-     * Metodo chiamato per creare e restituire la vista associata al Fragment.
-     * @param inflater oggetto per gonfiare (inflate) il layout del Fragment.
-     * @param container il contenitore che ospita la vista del Fragment.
-     * @param savedInstanceState dati salvati dallo stato precedente, se disponibili.
-     * @return la vista creata per il Fragment.
-     */
-
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_containers, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this); // Se necessario
+        setContentView(R.layout.activity_select_container);
 
         // Inizializzazione Firebase
         db = FirebaseFirestore.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        recyclerView = view.findViewById(R.id.containerRecyclerView);
-        Button addContainerButton = view.findViewById(R.id.addContainerButton);
+        // Trova le viste direttamente
+        recyclerView = findViewById(R.id.containerRecyclerView);
 
         // Configura RecyclerView
         containerList = new ArrayList<>();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Crea l'adapter e imposta il listener
-        adapter = new ContainerAdapter(containerList, getContext(), "ContainerDetailActivity");
+        adapter = new ContainerAdapter(containerList, this, "UseWaterActivity");
         recyclerView.setAdapter(adapter);
 
         // Carica i contenitori da Firebase
         loadContainers();
 
-        // Pulsante per aggiungere un nuovo contenitore
-        addContainerButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddContainerActivity.class);
-            startActivity(intent);
-        });
+        // Inizializza il pulsante Torna indietro
+        Button backButton = findViewById(R.id.comeBackButton);
+        backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
     }
+
 
     private void loadContainers() {
         db.collection("users")
@@ -114,7 +92,8 @@ public class ContainersFragment extends Fragment {
                         }
                         adapter.notifyDataSetChanged();
                     } else {
-                        Toast.makeText(getContext(), "Errore nel caricamento: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Errore nel caricamento: " + task.getException(), Toast.LENGTH_SHORT).show();
+
                     }
                 });
     }

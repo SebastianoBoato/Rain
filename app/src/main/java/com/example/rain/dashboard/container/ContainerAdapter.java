@@ -21,10 +21,12 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cont
 
     private List<Container> containerList;
     private Context context;
+    private String targetActivity; // Parametro per definire quale Activity deve essere aperta
 
-    public ContainerAdapter(List<Container> containerList, Context context) {
+    public ContainerAdapter(List<Container> containerList, Context context, String targetActivity) {
         this.containerList = containerList;
         this.context = context;
+        this.targetActivity = targetActivity;
     }
 
     @NonNull
@@ -48,7 +50,14 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cont
         }
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ContainerDetailActivity.class);
+            Intent intent;
+            if("ContainerDetailActivity".equals(targetActivity)){
+                intent = new Intent(context, ContainerDetailActivity.class);
+            }else if("UseWaterActivity".equals(targetActivity)){
+                intent = new Intent(context, UseWaterActivity.class);
+            }else{
+                return;
+            }
             intent.putExtra("container", container);  // Passa il contenitore come Serializable
             context.startActivity(intent);
         });

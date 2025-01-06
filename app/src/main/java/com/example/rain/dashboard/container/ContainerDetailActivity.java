@@ -69,7 +69,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
 
         // Popola le TextView con i dati del Container
         if (container != null) {
-            nameTextView.setText("Nome: " + container.getName());
+            nameTextView.setText(container.getName());
             shapeTextView.setText("Forma: " + container.getShape());
             param1TextView.setText("Parametro 1: " + container.getParam1() + " cm");
             param2TextView.setText(container.getParam2() != null ? "Parametro 2: " + container.getParam2() + " cm" : "Parametro 2: Non esistente");
@@ -83,6 +83,14 @@ public class ContainerDetailActivity extends AppCompatActivity {
             currentVolumeTextView.setText("Volume attuale: " + container.getCurrentVolume() + " cm\u00B3");
             currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume()/1000 + " L");
         }
+
+        // Inizializza il pulsante per utilizzo acqua
+        Button useWaterButton = findViewById(R.id.useWaterButton);
+        useWaterButton.setOnClickListener(v -> {
+            Intent intent = new Intent(this, UseWaterActivity.class);
+            intent.putExtra("container", container);  // Passa il contenitore come Serializable
+            this.startActivity(intent);
+        });
 
         // Pulsante per modificare
         editButton.setOnClickListener(v -> {

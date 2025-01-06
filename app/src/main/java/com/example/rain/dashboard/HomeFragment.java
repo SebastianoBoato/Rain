@@ -9,9 +9,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.example.rain.R;
+import com.example.rain.dashboard.container.AddContainerActivity;
+import com.example.rain.dashboard.container.SelectContainerActivity;
 import com.example.rain.dashboard.profile.ProfileActivity;
 import com.example.rain.databinding.FragmentHomeBinding;
 import com.example.rain.databinding.FragmentWeatherBinding;
@@ -40,6 +43,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private Button selectContainerButton;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +81,7 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 sum += document.getDouble("currentVolume");
                             }
-                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.1fL", sum));
+                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.1fL", sum/1000));
                         }
                         else {
                             Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
@@ -120,6 +124,13 @@ public class HomeFragment extends Fragment {
             public void onError(String error) {
                 Snackbar.make(view, error, Snackbar.LENGTH_LONG).show();
             }
+        });
+
+        //bottone per modificare quantità acqua
+        selectContainerButton = view.findViewById(R.id.selectContainerButton);
+        selectContainerButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), SelectContainerActivity.class);
+            startActivity(intent);
         });
 
         return view; // Restituisce la vista radice del Fragment.
