@@ -242,7 +242,7 @@
 
         <Button
             android:id="@+id/selectContainerButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Seleziona il contenitore"
             android:backgroundTint="#2196F3"

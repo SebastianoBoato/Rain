@@ -14,5 +14,6 @@
     <color name="blue_accent">#2196F3</color>
     <!-- Colore blu per titoli per gli errori -->
     <color name="title_blue">#005596</color>
+    <color name="red">#FF0000</color>
 
 </resources>

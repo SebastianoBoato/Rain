@@ -159,7 +159,7 @@
         <!-- Pulsante per modificare acqua -->
         <Button
             android:id="@+id/useWaterButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hai utilizzato acqua?"
             android:layout_below="@id/currentVolume"
@@ -171,7 +171,7 @@
         <!-- Pulsante per modificare -->
         <Button
             android:id="@+id/editButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Modifica Nome Contenitore"
             android:layout_below="@id/useWaterButton"
@@ -183,13 +183,13 @@
         <!-- Pulsante per eliminare -->
         <Button
             android:id="@+id/deleteButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Elimina"
             android:layout_below="@id/editButton"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:backgroundTint="#2196F3"
+            android:backgroundTint="@color/red"
             android:textColor="@android:color/white"/>
     </LinearLayout>
 
