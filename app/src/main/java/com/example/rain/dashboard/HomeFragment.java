@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -29,7 +30,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -55,6 +58,7 @@ public class HomeFragment extends Fragment {
         user = FirebaseAuth.getInstance().getCurrentUser();
         String userId = user.getUid();
 
+        // Carica il nome dell'utente
         db.collection("users").document(userId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -64,6 +68,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //accedere al profilo utente
         binding.profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +77,29 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        db.collection("users").document(userId).collection("containers").get()
+        // Aggiungi listener per la modifica in tempo reale dei contenitori
+        db.collection("users").document(userId).collection("containers")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Snackbar.make(view, "Errore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            double sum = 0;
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                sum += document.getDouble("currentVolume");
+                            }
+                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum / 1000)); // Converti in Litri
+                        } else {
+                            Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        /*db.collection("users").document(userId).collection("containers").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -93,7 +120,7 @@ public class HomeFragment extends Fragment {
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(view, "Errore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
                     }
-                });
+                });*/
 
         WeatherUtils.getLocation(db, user, new OneElementCallback<String>() {
             @Override
