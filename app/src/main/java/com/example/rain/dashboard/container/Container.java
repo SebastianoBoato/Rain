@@ -3,16 +3,20 @@ package com.example.rain.dashboard.container;
 import java.io.Serializable;
 
 public class Container implements Serializable {
-    private final String id;
-    private  String name;
-    private final String shape;
-    private final Double param1;
+    private String id;
+    private String name;
+    private String shape;
+    private Double param1;
     private Double param2;
-    private final Double height;
-    private final Double roofArea;
-    private final Double area;
-    private final Double totalVolume;
+    private Double height;
+    private Double roofArea;
+    private Double area;
+    private Double totalVolume;
     private Double currentVolume;
+
+    // Costruttore vuoto richiesto da Firebase Firestore
+    public Container() {
+    }
 
     public Container(String id, String name, String shape, Double param1, Double height, Double roofArea, Double area, Double totalVolume, Double currentVolume) {
         this.id = id;

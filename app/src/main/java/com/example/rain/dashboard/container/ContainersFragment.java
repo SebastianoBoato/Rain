@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import java.util.List;
 
 import com.example.rain.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -84,6 +87,37 @@ public class ContainersFragment extends Fragment {
             Intent intent = new Intent(getActivity(), AddContainerActivity.class);
             startActivity(intent);
         });
+
+        // Path alla collection "containers" dell'utente specifico
+        CollectionReference containersRef = db.collection("users").document(userId).collection("containers");
+
+        // Aggiungi un listener per la collezione
+        containersRef.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.e("Firestore", "Errore nel listener: " + error.getMessage());
+                return;
+            }
+
+            if (value != null) {
+                for (DocumentChange docChange : value.getDocumentChanges()) {
+                    switch (docChange.getType()) {
+                        case ADDED:
+                            Log.d("Firestore", "Nuovo container aggiunto: " + docChange.getDocument().getData());
+                            break;
+                        case MODIFIED:
+                            Log.d("Firestore", "Container modificato: " + docChange.getDocument().getData());
+                            break;
+                        case REMOVED:
+                            Log.d("Firestore", "Container rimosso: " + docChange.getDocument().getData());
+                            break;
+                    }
+                }
+
+                // Richiama il metodo per ricaricare i dati
+                loadContainers();
+            }
+        });
+
     }
 
     private void loadContainers() {

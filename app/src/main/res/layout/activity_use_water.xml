@@ -72,6 +72,32 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp" />
 
+    <!-- Istruzioni per eliminare tutta l'acqua -->
+    <TextView
+        android:id="@+id/instructions1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hai utilizzato tutta l'acqua del contenitore?"
+        android:textSize="18sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/currentQuantity"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- Bottone per svuotare il contenitore -->
+    <Button
+        android:id="@+id/resetWaterButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Svuota contenitore"
+        app:layout_constraintTop_toBottomOf="@id/instructions1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#2196F3"
+        android:textColor="@android:color/white" />
+
     <!-- Istruzioni per inserire la quantità di acqua -->
     <TextView
         android:id="@+id/instructions"
@@ -80,7 +106,7 @@
         android:text="Inserisci la quantità di acqua utilizzata (in litri):"
         android:textSize="18sp"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/currentQuantity"
+        app:layout_constraintTop_toBottomOf="@id/resetWaterButton"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="30dp"
         android:layout_marginStart="16dp" />
@@ -109,7 +135,7 @@
         app:layout_constraintTop_toBottomOf="@id/waterInput"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#2196F3"
         android:textColor="@android:color/white" />
 

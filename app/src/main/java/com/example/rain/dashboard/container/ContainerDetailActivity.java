@@ -21,6 +21,8 @@ import com.example.rain.R;
 import com.example.rain.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -42,9 +44,6 @@ public class ContainerDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container_detail);
 
-        // Recupera il Container dall'Intent
-        Container container = (Container) getIntent().getSerializableExtra("container");
-
         // Collega le TextView
         TextView nameTextView = findViewById(R.id.name);
         TextView shapeTextView = findViewById(R.id.shape);
@@ -64,7 +63,8 @@ public class ContainerDetailActivity extends AppCompatActivity {
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
 
-        // Ottieni il contenitore passato tramite Intent
+        // Recupera il Container dall'Intent
+        Container container = (Container) getIntent().getSerializableExtra("container");
         containerId = container.getId();  // Salva l'ID del contenitore per la modifica o eliminazione
 
         // Popola le TextView con i dati del Container
@@ -83,6 +83,47 @@ public class ContainerDetailActivity extends AppCompatActivity {
             currentVolumeTextView.setText("Volume attuale: " + container.getCurrentVolume() + " cm\u00B3");
             currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume()/1000 + " L");
         }
+
+        // Imposta un listener in tempo reale sul documento del container
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        // Percorso al documento del container
+        DocumentReference containerRef = db.collection("users")
+                .document(user.getUid())
+                .collection("containers")
+                .document(containerId);
+
+        // Aggiungi un listener in tempo reale
+        containerRef.addSnapshotListener((snapshot, error) -> {
+            if (error != null) {
+                Log.e("Firestore", "Errore nel listener: " + error.getMessage());
+                return;
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                // Aggiorna i dati dell'interfaccia
+                Container updatedContainer = snapshot.toObject(Container.class);
+                if (updatedContainer != null) {
+                    nameTextView.setText(updatedContainer.getName());
+                    shapeTextView.setText("Forma: " + updatedContainer.getShape());
+                    param1TextView.setText("Parametro 1: " + updatedContainer.getParam1() + " cm");
+                    param2TextView.setText(updatedContainer.getParam2() != null ? "Parametro 2: " + updatedContainer.getParam2() + " cm" : "Parametro 2: Non esistente");
+                    heightTextView.setText("Altezza: " + updatedContainer.getHeight() + " cm");
+                    roofAreaTextView.setText("Area del tetto: " + updatedContainer.getRoofArea() + " m");
+                    areaTextView.setText("Area di base: " + updatedContainer.getBaseArea() + " cm");
+                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " cm\u00B3");
+                    currentVolumeTextView.setText("Volume attuale: " + updatedContainer.getCurrentVolume() + " cm\u00B3");
+                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() / 1000 + " L");
+                }
+            }
+        });
 
         // Inizializza il pulsante per utilizzo acqua
         Button useWaterButton = findViewById(R.id.useWaterButton);

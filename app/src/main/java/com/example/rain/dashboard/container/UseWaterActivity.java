@@ -24,9 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class UseWaterActivity extends AppCompatActivity {
 
-    private String containerId;
-    private Button backButton, saveButton;
+    private String containerId1, containerId;
+    private Button backButton, saveButton, resetWaterButton;
     EditText waterInput;
+    private double currentQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,41 @@ public class UseWaterActivity extends AppCompatActivity {
         TextView totalVolumeTextView = findViewById(R.id.totalVolume);
         TextView currentQuantityTextView = findViewById(R.id.currentQuantity);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        containerId = container.getId();
+
+        /*if (user == null) {
+            Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }*/
+        // Riferimento al documento del container
+        DocumentReference containerRef = db.collection("users")
+                .document(user.getUid())
+                .collection("containers")
+                .document(containerId);
+
+        // Aggiungi un listener in tempo reale al documento del container
+        containerRef.addSnapshotListener((documentSnapshot, e) -> {
+            if (e != null) {
+                Log.e("Firestore", "Errore nel listener: ", e);
+                return;
+            }
+
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                // Recupera i dati aggiornati del container
+                Container updatedContainer = documentSnapshot.toObject(Container.class);
+                if (updatedContainer != null) {
+                    // Aggiorna i dati nell'interfaccia
+                    nameTextView.setText(updatedContainer.getName());
+                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " cm\u00B3");
+                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() / 1000 + " L");
+                    currentQuantity = updatedContainer.getCurrentVolume() / 1000;
+                }
+            }
+        });
+
         waterInput = findViewById(R.id.waterInput);
 
         // Inizializza il pulsante Torna indietro
@@ -56,7 +92,16 @@ public class UseWaterActivity extends AppCompatActivity {
             nameTextView.setText("Nome: " + container.getName());
             totalVolumeTextView.setText("Quantità totale: " + container.getTotalVolume()/1000 + " L");
             currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume()/1000 + " L");
+            currentQuantity = container.getCurrentVolume() / 1000;
         }
+
+        resetWaterButton = findViewById(R.id.resetWaterButton);
+        resetWaterButton.setOnClickListener(view -> {
+            double newQuantity = 0;
+            updateWaterUsage(newQuantity, containerId);
+            currentQuantityTextView.setText("Quantità attuale: " + currentQuantity + " L");
+            finish();
+        });
 
         saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(view -> {
@@ -68,12 +113,13 @@ public class UseWaterActivity extends AppCompatActivity {
                 // Verifica se il valore è valido
                 if (waterUsed < 0) {
                     Toast.makeText(this, "La quantità di acqua non può essere negativa", Toast.LENGTH_SHORT).show();
-                } else if (waterUsed > (container.getCurrentVolume()/1000)) {
+                } else if (waterUsed > currentQuantity) {
                     Toast.makeText(this, "Non puoi usare più acqua di quella disponibile nel contenitore", Toast.LENGTH_SHORT).show();
                 } else {
                     // Procedi con l'aggiornamento della quantità di acqua utilizzata
-                    double newQuantity = container.getCurrentVolume() - waterUsed*1000;
+                    double newQuantity = currentQuantity*1000 - waterUsed*1000;
                     updateWaterUsage(newQuantity, containerId);
+                    currentQuantityTextView.setText("Quantità attuale: " + currentQuantity + " L");
                     finish();
                 }
             } else {
