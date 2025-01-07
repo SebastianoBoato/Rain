@@ -3,6 +3,7 @@ package com.example.rain.dashboard.container;
 import static java.security.AccessController.getContext;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.rain.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -61,6 +64,36 @@ public class SelectContainerActivity extends AppCompatActivity {
         // Inizializza il pulsante Torna indietro
         Button backButton = findViewById(R.id.comeBackButton);
         backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
+
+        // Path alla collection "containers" dell'utente specifico
+        CollectionReference containersRef = db.collection("users").document(userId).collection("containers");
+
+        // Aggiungi un listener per la collezione
+        containersRef.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.e("Firestore", "Errore nel listener: " + error.getMessage());
+                return;
+            }
+
+            if (value != null) {
+                for (DocumentChange docChange : value.getDocumentChanges()) {
+                    switch (docChange.getType()) {
+                        case ADDED:
+                            Log.d("Firestore", "Nuovo container aggiunto: " + docChange.getDocument().getData());
+                            break;
+                        case MODIFIED:
+                            Log.d("Firestore", "Container modificato: " + docChange.getDocument().getData());
+                            break;
+                        case REMOVED:
+                            Log.d("Firestore", "Container rimosso: " + docChange.getDocument().getData());
+                            break;
+                    }
+                }
+
+                // Richiama il metodo per ricaricare i dati
+                loadContainers();
+            }
+        });
     }
 
 

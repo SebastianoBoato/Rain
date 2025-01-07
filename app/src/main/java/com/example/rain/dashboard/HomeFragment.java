@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 sum += document.getDouble("currentVolume");
                             }
-                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.1fL", sum/1000));
+                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum/1000));
                         }
                         else {
                             Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
