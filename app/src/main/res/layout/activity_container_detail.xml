@@ -165,8 +165,9 @@
             android:layout_below="@id/currentVolume"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:backgroundTint="#2196F3"
-            android:textColor="@android:color/white"/>
+            android:backgroundTint="#005596"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
         <!-- Pulsante per modificare acqua -->
         <Button
@@ -177,8 +178,9 @@
             android:layout_below="@id/editButton"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:backgroundTint="#2196F3"
-            android:textColor="@android:color/white"/>
+            android:backgroundTint="#005596"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"  />
 
         <!-- Pulsante per eliminare -->
         <Button
@@ -186,11 +188,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Elimina"
-            android:layout_below="@id/editButton"
+            android:layout_below="@id/useWaterButton"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:backgroundTint="@color/red"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 </ScrollView>

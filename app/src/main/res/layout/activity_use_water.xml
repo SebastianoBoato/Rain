@@ -95,8 +95,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#2196F3"
-        android:textColor="@android:color/white" />
+        android:backgroundTint="#005596"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
 
     <!-- Istruzioni per inserire la quantità di acqua -->
     <TextView
@@ -136,7 +137,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#2196F3"
-        android:textColor="@android:color/white" />
+        android:backgroundTint="#005596"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

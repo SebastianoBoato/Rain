@@ -17,9 +17,10 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:backgroundTint="@color/background_gray"
-        android:textColor="@color/primary_blue"
+        android:textColor="#005596"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -52,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nome del serbatoio"
-                android:inputType="numberDecimal"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:layout_marginTop="16dp" />
 
@@ -167,10 +168,11 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Salva"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#2196F3"
-                android:textColor="@color/white" />
+                android:backgroundTint="#005596"
+                android:text="Aggiungi contenitore"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

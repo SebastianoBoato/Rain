@@ -57,8 +57,9 @@
             android:text="Accedi"
             android:layout_marginTop="24dp"
             android:layout_marginHorizontal="32dp"
-            android:backgroundTint="@color/primary_blue"
-            android:textColor="@color/white" />
+            android:backgroundTint="#005596"
+            android:textColor="@color/white"
+            android:textStyle="bold" />
 
         <!-- Link per la registrazione -->
         <TextView
@@ -66,8 +67,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Non hai un account? Registrati"
-            android:textColor="@color/primary_blue"
+            android:textColor="#005596"
             android:layout_marginTop="16dp"
+            android:textStyle="bold"
             android:clickable="true"
             android:gravity="center"
             android:background="?android:attr/selectableItemBackground"
