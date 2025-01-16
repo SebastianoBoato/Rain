@@ -18,6 +18,7 @@
         android:layout_margin="25dp"
         android:contentDescription="Profile Image"
         android:background="@drawable/bottom_nav_background"
+        android:elevation="8dp"
         android:padding="10dp"/>
 
     <TextView
@@ -46,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nav_background"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profileImage"
         android:layout_marginTop="25dp"
@@ -138,6 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nav_background"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/waterSummary"
         android:layout_marginTop="20dp"
@@ -221,6 +224,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_nav_background"
+        android:elevation="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/weatherSummary"
         android:layout_marginTop="20dp"
@@ -244,12 +248,17 @@
             android:id="@+id/selectContainerButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/title_blue"
             android:text="Seleziona il contenitore"
-            android:backgroundTint="#2196F3"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="48dp"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/useWaterTextView"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="5dp"/>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
