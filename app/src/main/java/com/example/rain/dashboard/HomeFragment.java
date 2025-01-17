@@ -89,15 +89,63 @@ public class HomeFragment extends Fragment {
                         }
 
                         if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                            double sum = 0;
+                            double sumCurrentVolume = 0;
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 if(document.getDouble("currentVolume") != null){
-                                    sum += document.getDouble("currentVolume");
+                                    sumCurrentVolume += document.getDouble("currentVolume");
                                 }
                             }
-                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum)); // Converti in Litri
+                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2f", sumCurrentVolume) + " L"); // Converti in Litri
                         } else {
                             Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        // Aggiungi listener per la modifica in tempo reale dell'acqua raccolta
+        db.collection("users").document(userId).collection("collection_history")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Snackbar.make(view, "Errore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            double sumCollectedWater = 0;
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                if(document.getDouble("collectedVolume") != null){
+                                    sumCollectedWater += document.getDouble("collectedVolume");
+                                }
+                            }
+                            binding.lifetimeCollectedVolume.setText(String.format(Locale.US, "%.2f", sumCollectedWater) + " L"); // Converti in Litri
+                        } else {
+                            Snackbar.make(view, "Non trovata l'acqua utilizzata", Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+        // Aggiungi listener per la modifica in tempo reale dell'acqua usata
+        db.collection("users").document(userId).collection("usage_history")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Snackbar.make(view, "Errore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                            double sumUsedWater = 0;
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                if(document.getDouble("usedVolume") != null){
+                                    sumUsedWater += document.getDouble("usedVolume");
+                                }
+                            }
+                            binding.lifetimeUsedVolume.setText(String.format(Locale.US, "%.2f", sumUsedWater) + " L"); // Converti in Litri
+                        } else {
+                            Snackbar.make(view, "Non trovata l'acqua utilizzata", Snackbar.LENGTH_LONG).show();
                         }
                     }
                 });
