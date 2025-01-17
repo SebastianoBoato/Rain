@@ -136,16 +136,6 @@
             android:layout_below="@id/baseArea"
             android:layout_marginTop="8dp"/>
 
-        <!-- Volume attuale -->
-        <TextView
-            android:id="@+id/currentVolume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Volume attuale"
-            android:textSize="16sp"
-            android:layout_below="@id/totalVolume"
-            android:layout_marginTop="8dp"/>
-
         <!-- Quantità attuale -->
         <TextView
             android:id="@+id/currentQuantity"

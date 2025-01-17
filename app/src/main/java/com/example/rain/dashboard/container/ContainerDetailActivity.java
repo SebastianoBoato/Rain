@@ -53,7 +53,6 @@ public class ContainerDetailActivity extends AppCompatActivity {
         TextView roofAreaTextView = findViewById(R.id.roofArea);
         TextView areaTextView = findViewById(R.id.baseArea);
         TextView totalVolumeTextView = findViewById(R.id.totalVolume);
-        TextView currentVolumeTextView = findViewById(R.id.currentVolume);
         TextView currentQuantityTextView = findViewById(R.id.currentQuantity);
 
         editButton = findViewById(R.id.editButton);
@@ -118,7 +117,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
                     roofAreaTextView.setText("Area del tetto: " + updatedContainer.getRoofArea() + " m");
                     areaTextView.setText("Area di base: " + updatedContainer.getBaseArea() + " cm");
                     totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
-                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() + " L");
+                    currentQuantityTextView.setText(String.format("Quantità attuale: %.2f", updatedContainer.getCurrentVolume()) + "L");
                 }
             }
         });

@@ -80,8 +80,8 @@ public class UseWaterActivity extends AppCompatActivity {
                     // Aggiorna i dati nell'interfaccia
                     nameTextView.setText(updatedContainer.getName());
                     totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
-                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() + " L");
                     currentQuantity = updatedContainer.getCurrentVolume();
+                    currentQuantityTextView.setText("Quantità attuale: " + String.format("%2f", currentQuantity) + " L");
                 }
             }
         });
@@ -99,15 +99,15 @@ public class UseWaterActivity extends AppCompatActivity {
 
             nameTextView.setText("Nome: " + container.getName());
             totalVolumeTextView.setText("Quantità totale: " + container.getTotalVolume() + " L");
-            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume() + " L");
             currentQuantity = container.getCurrentVolume(); //litri
+            currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", currentQuantity) +"L");
         }
 
         resetWaterButton = findViewById(R.id.resetWaterButton);
         resetWaterButton.setOnClickListener(view -> {
             double newQuantity = 0;
             updateWaterUsage(newQuantity, containerId);
-            currentQuantityTextView.setText("Quantità attuale: " + currentQuantity + " L");
+            currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", newQuantity) + "L");
             finish();
         });
 
@@ -125,10 +125,10 @@ public class UseWaterActivity extends AppCompatActivity {
                     Toast.makeText(this, "Non puoi usare più acqua di quella disponibile nel contenitore", Toast.LENGTH_SHORT).show();
                 } else {
                     // Procedi con l'aggiornamento della quantità di acqua utilizzata
-                    double newQuantity = currentQuantity - waterUsed; //cm3
+                    double newQuantity = currentQuantity - waterUsed;
                     updateWaterUsage(newQuantity, containerId);
                     updateUsageHistory(waterUsed);
-                    currentQuantityTextView.setText("Quantità attuale: " + currentQuantity + " L");
+                    currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", newQuantity) + "L");
                     finish();
                 }
             } else {
