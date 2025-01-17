@@ -81,7 +81,7 @@ public class UseWaterActivity extends AppCompatActivity {
                     nameTextView.setText(updatedContainer.getName());
                     totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
                     currentQuantity = updatedContainer.getCurrentVolume();
-                    currentQuantityTextView.setText("Quantità attuale: " + String.format("%2f", currentQuantity) + " L");
+                    currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", currentQuantity) + " L");
                 }
             }
         });

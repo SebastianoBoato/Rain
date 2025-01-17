@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.rain.R;
@@ -90,7 +91,9 @@ public class HomeFragment extends Fragment {
                         if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                             double sum = 0;
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                sum += document.getDouble("currentVolume");
+                                if(document.getDouble("currentVolume") != null){
+                                    sum += document.getDouble("currentVolume");
+                                }
                             }
                             binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum)); // Converti in Litri
                         } else {
