@@ -5,46 +5,60 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:layout_marginTop="10dp" >
+    android:layout_marginTop="10dp"
+    android:background="@drawable/rounded_card_background"
+    android:elevation="4dp">
 
-    <!-- Visualizza la forma del contenitore -->
-
-    <!-- Visualizza i dettagli -->
-
+    <!-- Immagine del contenitore (rotonda) -->
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginRight="10dp"
-        android:layout_centerVertical="true"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="16dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
 
-    <TextView
-        android:id="@+id/name"
+        android:background="@drawable/circle_background"
+        android:contentDescription="res/drawable/circle_icon.jpg" />
+
+    <!-- Layout verticale per i dettagli -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Nome"
-        android:textStyle="bold"
+        android:orientation="vertical"
         android:layout_toEndOf="@id/imageView"
-        android:textColor="@color/black" />
+        android:layout_centerVertical="true">
 
-    <TextView
-        android:id="@+id/shape"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/imageView"
-        android:layout_below="@id/name"
-        android:textStyle="bold"
-        tools:text="Forma"
-        android:textColor="@color/black" />
+        <!-- Nome -->
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Nome del contenitore"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:ellipsize="end"
+            android:maxLines="1" />
 
-    <TextView
-        android:id="@+id/currentVolume"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/imageView"
-        android:layout_below="@id/shape"
-        android:textStyle="bold"
-        tools:text="Acqua all'interno"
-        android:textColor="@color/black" />
+        <!-- Forma -->
+        <TextView
+            android:id="@+id/shape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="Forma: Cilindro"
+            android:textColor="@color/title_blue"
+            android:textSize="14sp" />
 
+        <!-- Volume corrente -->
+        <TextView
+            android:id="@+id/currentVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="Volume: 10L"
+            android:textColor="@color/title_blue"
+            android:textSize="14sp" />
+    </LinearLayout>
 </RelativeLayout>

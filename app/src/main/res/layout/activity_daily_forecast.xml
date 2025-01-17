@@ -35,7 +35,7 @@
         android:layout_margin="15dp"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:text="METEO ORARIO"
+        android:text="Meteo orario"
         android:textColor="@color/title_blue" />
 
 

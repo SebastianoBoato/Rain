@@ -2,6 +2,7 @@
     <string name="app_name">Rain</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="container_image">res/drawable/circle_icon.jpg</string>
     <string-array name="container_shapes">
         <item>Cerchio</item>
         <item>Ellisse</item>
