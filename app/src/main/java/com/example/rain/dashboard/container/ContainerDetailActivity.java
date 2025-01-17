@@ -76,12 +76,11 @@ public class ContainerDetailActivity extends AppCompatActivity {
             heightTextView.setText("Altezza: " + container.getHeight() + " cm");
             if(container.getRoofArea() != null){
                 roofAreaTextView.setVisibility(View.VISIBLE);
+                roofAreaTextView.setText("Area del tetto: " + container.getRoofArea() + " m");
             }
-            roofAreaTextView.setText("Area del tetto: " + container.getRoofArea() + " m");
             areaTextView.setText("Area di base: " + container.getBaseArea() + " cm");
-            totalVolumeTextView.setText("Volume totale: " + container.getTotalVolume() + " cm\u00B3");
-            currentVolumeTextView.setText("Volume attuale: " + container.getCurrentVolume() + " cm\u00B3");
-            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume()/1000 + " L");
+            totalVolumeTextView.setText("Volume totale: " + container.getTotalVolume() + " L");
+            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume() + " L");
         }
 
         // Imposta un listener in tempo reale sul documento del container
@@ -118,9 +117,8 @@ public class ContainerDetailActivity extends AppCompatActivity {
                     heightTextView.setText("Altezza: " + updatedContainer.getHeight() + " cm");
                     roofAreaTextView.setText("Area del tetto: " + updatedContainer.getRoofArea() + " m");
                     areaTextView.setText("Area di base: " + updatedContainer.getBaseArea() + " cm");
-                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " cm\u00B3");
-                    currentVolumeTextView.setText("Volume attuale: " + updatedContainer.getCurrentVolume() + " cm\u00B3");
-                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() / 1000 + " L");
+                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
+                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() + " L");
                 }
             }
         });

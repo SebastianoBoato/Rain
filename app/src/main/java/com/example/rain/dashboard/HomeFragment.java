@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 sum += document.getDouble("currentVolume");
                             }
-                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum / 1000)); // Converti in Litri
+                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum)); // Converti in Litri
                         } else {
                             Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
                         }

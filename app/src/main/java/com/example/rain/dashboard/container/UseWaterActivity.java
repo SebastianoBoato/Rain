@@ -20,7 +20,15 @@ import com.example.rain.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UseWaterActivity extends AppCompatActivity {
 
@@ -71,9 +79,9 @@ public class UseWaterActivity extends AppCompatActivity {
                 if (updatedContainer != null) {
                     // Aggiorna i dati nell'interfaccia
                     nameTextView.setText(updatedContainer.getName());
-                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " cm\u00B3");
-                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() / 1000 + " L");
-                    currentQuantity = updatedContainer.getCurrentVolume() / 1000;
+                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
+                    currentQuantityTextView.setText("Quantità attuale: " + updatedContainer.getCurrentVolume() + " L");
+                    currentQuantity = updatedContainer.getCurrentVolume();
                 }
             }
         });
@@ -90,9 +98,9 @@ public class UseWaterActivity extends AppCompatActivity {
             containerId = container.getId();  // Salva l'ID del contenitore per la modifica o eliminazione
 
             nameTextView.setText("Nome: " + container.getName());
-            totalVolumeTextView.setText("Quantità totale: " + container.getTotalVolume()/1000 + " L");
-            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume()/1000 + " L");
-            currentQuantity = container.getCurrentVolume() / 1000;
+            totalVolumeTextView.setText("Quantità totale: " + container.getTotalVolume() + " L");
+            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume() + " L");
+            currentQuantity = container.getCurrentVolume(); //litri
         }
 
         resetWaterButton = findViewById(R.id.resetWaterButton);
@@ -108,7 +116,7 @@ public class UseWaterActivity extends AppCompatActivity {
             String input = waterInput.getText().toString();
 
             if (!input.isEmpty()) {
-                double waterUsed = Double.parseDouble(input);
+                double waterUsed = Double.parseDouble(input); //L
 
                 // Verifica se il valore è valido
                 if (waterUsed < 0) {
@@ -117,8 +125,9 @@ public class UseWaterActivity extends AppCompatActivity {
                     Toast.makeText(this, "Non puoi usare più acqua di quella disponibile nel contenitore", Toast.LENGTH_SHORT).show();
                 } else {
                     // Procedi con l'aggiornamento della quantità di acqua utilizzata
-                    double newQuantity = currentQuantity*1000 - waterUsed*1000;
+                    double newQuantity = currentQuantity - waterUsed; //cm3
                     updateWaterUsage(newQuantity, containerId);
+                    updateUsageHistory(waterUsed);
                     currentQuantityTextView.setText("Quantità attuale: " + currentQuantity + " L");
                     finish();
                 }
@@ -153,7 +162,7 @@ public class UseWaterActivity extends AppCompatActivity {
                 .document(containerId);
 
 
-        // Aggiorna il campo 'name' nel documento del contenitore
+        // Aggiorna il campo 'currentVolume' nel documento del contenitore
         containerRef.update("currentVolume", newQuantity)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Contenitore aggiornato con successo", Toast.LENGTH_SHORT).show();
@@ -162,5 +171,78 @@ public class UseWaterActivity extends AppCompatActivity {
                     Log.e("Firestore", "Errore nell'aggiornamento del contenitore: ", e);
                     Toast.makeText(this, "Errore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void updateUsageHistory(double waterUsed) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user.getUid();
+
+        if (user == null) {
+            Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
+            // Reindirizza alla schermata di login
+            Intent loginIntent = new Intent(this, LoginActivity.class); // Sostituisci LoginActivity con il nome della tua attività di login
+            startActivity(loginIntent);
+            finish(); // Termina l'attività corrente per impedire il ritorno a questa schermata
+            return;
+        }
+
+        // Ottieni la data attuale
+        Date currentDate = new Date();
+
+        // Definisci il formato di data desiderato (gg/MM/yyyy)
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        // Format della data
+        String formattedDate = sdf.format(currentDate);
+
+
+        Map<String, Object> usageHistory = new HashMap<>();
+        usageHistory.put("date", formattedDate);
+        usageHistory.put("usedVolume", waterUsed);
+
+        db.collection("users")
+                .document(userId)
+                .collection("usage_history")
+                .whereEqualTo("date", formattedDate) // Controlla se esiste già un documento con la stessa data
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().isEmpty()) {
+                            // Documento con la data specificata trovato
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId(); // Ottieni l'ID del documento
+                                db.collection("users")
+                                        .document(userId)
+                                        .collection("usage_history")
+                                        .document(documentId)
+                                        .update("usedVolume", FieldValue.increment((double) waterUsed)) // Incrementa il volume
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(this, "Volume aggiornato con successo", Toast.LENGTH_SHORT).show();
+                                            finish(); // Torna al Fragment precedente
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(this, "Errore nell'aggiornamento: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                            }
+                        } else {
+                            // Nessun documento con la data specificata, crea un nuovo documento
+                            db.collection("users")
+                                    .document(userId)
+                                    .collection("usage_history")
+                                    .add(usageHistory)
+                                    .addOnSuccessListener(documentReference -> {
+                                        Toast.makeText(this, "Documento aggiunto con successo", Toast.LENGTH_SHORT).show();
+                                        finish(); // Torna al Fragment precedente
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(this, "Errore nell'aggiunta: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        }
+                    } else {
+                        Toast.makeText(this, "Errore nella query: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 }

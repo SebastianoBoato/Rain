@@ -41,7 +41,7 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.Cont
         Container container = containerList.get(position);
         holder.nameTextView.setText(String.format("Nome: %s", container.getName()));
         holder.shapeTextView.setText(String.format("Forma: %s", container.getShape()));
-        holder.currentVolumeTextView.setText(String.format("Quantità attuale: %.2f L", container.getCurrentVolume()/1000));
+        holder.currentVolumeTextView.setText(String.format("Quantità attuale: %.2f L", container.getCurrentVolume()));
 
         if (container.getShape().equalsIgnoreCase("Cerchio") || container.getShape().equalsIgnoreCase("Ellisse")) {
             holder.imageView.setImageResource(R.drawable.circle_icon);
