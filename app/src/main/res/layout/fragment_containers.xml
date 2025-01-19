@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Aggiungi Contenitore"
-        android:backgroundTint="#2196F3"
+        android:backgroundTint="#005596"
         android:textColor="@android:color/white"
         android:layout_below="@id/titleText"
         android:layout_centerHorizontal="true"

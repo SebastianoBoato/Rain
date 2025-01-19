@@ -235,24 +235,24 @@ public class AddContainerActivity extends AppCompatActivity {
             case "Cerchio":
                 double diameter = param1;
                 area = Math.PI * Math.pow(diameter / 2, 2);
-                volume = area * height1;
+                volume = area * height1 / 1000;
                 break;
             case "Ellisse":
                 double semiMajorAxis = param1;
                 double semiMinorAxis = param2;
                 area = Math.PI * semiMajorAxis * semiMinorAxis;
-                volume = area * height1;
+                volume = area * height1 / 1000;
                 break;
             case "Rettangolo":
                 double length = param1;
                 double width = param2;
                 area = length * width;
-                volume = area * height1;
+                volume = area * height1 / 1000;
                 break;
             case "Quadrato":
                 double side = param1;
                 area = Math.pow(side, 2);
-                volume = area * height1;
+                volume = area * height1 / 1000;
                 break;
         }
 

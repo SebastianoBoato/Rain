@@ -56,6 +56,10 @@ public class ProfileActivity extends AppCompatActivity {
             binding.userName.setText("Utente non autenticato");
         }
 
+        setupButtons();
+    }
+
+    private void setupButtons() {
         // Bottone per l'informativa privacy
         binding.privacyPolicyButton.setOnClickListener(v -> showPrivacyDialog());
 
@@ -77,6 +81,9 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             finish(); // Chiudi l'activity attuale
         });
+
+        // Bottone per eliminare l'account
+        binding.deleteAccountButton.setOnClickListener(v -> showDeleteAccountConfirmationDialog());
     }
 
     private void loadUserData(String userId) {
@@ -201,5 +208,88 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Nessun dato modificato", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showDeleteAccountConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Elimina Account")
+                .setMessage("Sei sicuro di voler eliminare il tuo account? Questa azione è irreversibile e tutti i tuoi dati verranno cancellati definitivamente.")
+                .setPositiveButton("Elimina", (dialog, which) -> showPasswordConfirmationDialog())
+                .setNegativeButton("Annulla", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void showPasswordConfirmationDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_password_confirmation, null);
+        android.widget.EditText passwordEditText = dialogView.findViewById(R.id.passwordEditText);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Conferma Password")
+                .setView(dialogView)
+                .setPositiveButton("Conferma", (dialog, which) -> {
+                    String password = passwordEditText.getText().toString();
+                    if (!password.isEmpty()) {
+                        reAuthenticateAndDelete(password);
+                    } else {
+                        Toast.makeText(this, "Inserisci la password", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Annulla", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void reAuthenticateAndDelete(String password) {
+        // Mostra il dialog di progresso
+        AlertDialog progressDialog = new AlertDialog.Builder(this)
+                .setMessage("Eliminazione account in corso...")
+                .setCancelable(false)
+                .show();
+
+        // Riautenticazione dell'utente
+        auth.signInWithEmailAndPassword(user.getEmail(), password)
+                .addOnSuccessListener(authResult -> {
+                    // Procedi con l'eliminazione
+                    deleteUserData(progressDialog);
+                })
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Password non corretta", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void deleteUserData(AlertDialog progressDialog) {
+        String userId = user.getUid();
+
+        // Prima elimina i dati da Firestore
+        db.collection("users").document(userId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Dopo aver eliminato i dati, elimina l'account Firebase
+                    user.delete()
+                            .addOnSuccessListener(aVoid1 -> {
+                                progressDialog.dismiss();
+                                Toast.makeText(ProfileActivity.this,
+                                        "Account eliminato con successo", Toast.LENGTH_SHORT).show();
+
+                                // Reindirizza alla schermata di login
+                                auth.signOut();
+                                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
+                                Toast.makeText(ProfileActivity.this,
+                                        "Errore durante l'eliminazione dell'account: " + e.getMessage(),
+                                        Toast.LENGTH_LONG).show();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(ProfileActivity.this,
+                            "Errore durante l'eliminazione dei dati: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                });
     }
 }
