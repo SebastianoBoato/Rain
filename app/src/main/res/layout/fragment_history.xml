@@ -1,14 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".dashboard.HistoryFragment">
 
     <TextView
+        android:id="@+id/storicoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="HISTORY FRAGMENT" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="15dp"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:text="STORICO"
+        android:textColor="@color/title_blue" />
 
-</FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/storicoTextView"
+        android:fitsSystemWindows="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/raccoltaTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acqua raccolta"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/title_blue" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/collectionChart"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                app:layout_constraintTop_toBottomOf="@id/raccoltaTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/bottom_nav_background"/>
+
+            <TextView
+                android:id="@+id/utilizzataTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Acqua utilizzata"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/collectionChart"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="@color/title_blue" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/usageChart"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                app:layout_constraintTop_toBottomOf="@id/utilizzataTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="10dp"
+                android:background="@drawable/bottom_nav_background"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

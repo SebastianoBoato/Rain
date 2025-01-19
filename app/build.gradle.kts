@@ -62,4 +62,6 @@ dependencies {
     // Aggiungi questa riga per il client di localizzazione
     implementation("com.google.android.gms:play-services-location:18.0.0")
 
+    // grafico
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
