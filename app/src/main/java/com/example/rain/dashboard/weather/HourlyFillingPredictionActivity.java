@@ -80,6 +80,7 @@ public class HourlyFillingPredictionActivity extends AppCompatActivity {
                 List<HourlyFillingPredictionItem> hourlyFillingPredictionItems = new ArrayList<>();
                 double increase = containerCurrentVolume;
 
+                /* QUESTO SERVIVA PER CONSIDERARE SOLO LE ORE A PARTIRE DALLA ATTUALE
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
@@ -90,6 +91,13 @@ public class HourlyFillingPredictionActivity extends AppCompatActivity {
                         if (increase > containerTotalVolume) { increase = containerTotalVolume; }
                         hourlyFillingPredictionItems.add(new HourlyFillingPredictionItem(item.getTime(), increase));
                     }
+                }
+                */
+
+                for (HourlyWeatherItem item : hourlyWeatherItems) {
+                    increase += ( (item.getPrecip() / 10) * area ) / 1000;
+                    if (increase > containerTotalVolume) { increase = containerTotalVolume; }
+                    hourlyFillingPredictionItems.add(new HourlyFillingPredictionItem(item.getTime(), increase));
                 }
 
                 binding.predictionRecyclerView.setLayoutManager(new LinearLayoutManager(HourlyFillingPredictionActivity.this));

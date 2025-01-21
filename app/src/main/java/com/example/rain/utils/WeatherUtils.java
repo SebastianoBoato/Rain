@@ -216,8 +216,8 @@ public class WeatherUtils {
 
     private static void addFillingPredictionItem (List<FillingPredictionItem> fillingPredictionItems, List<HourlyWeatherItem> hourlyWeatherItems, QueryDocumentSnapshot document) {
 
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        /* Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY); */
 
         double area;
         if (document.get("roofArea") != null) {
@@ -232,11 +232,12 @@ public class WeatherUtils {
         double containerTotalVolume = document.getDouble("totalVolume") / 1000;
         double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
 
+
         double containerPredictionVolume = containerCurrentVolume;
         for (HourlyWeatherItem item : hourlyWeatherItems) {
-            if (Integer.parseInt(item.getTime().substring(0, 2)) >= hour ) {
+            //if (Integer.parseInt(item.getTime().substring(0, 2)) >= hour ) { USEREI QUESTO SE VOLESSI PARTIRE DALL'ORA ATTUALE
                 containerPredictionVolume += ( (item.getPrecip() / 10) * area ) / 1000;
-            }
+            //}
         }
 
         // rendo i valori reali in base alla capienza del contenitore
