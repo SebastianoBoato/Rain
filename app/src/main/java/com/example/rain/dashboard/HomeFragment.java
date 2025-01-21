@@ -1,6 +1,7 @@
 package com.example.rain.dashboard;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import android.content.Context;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -46,6 +49,7 @@ public class HomeFragment extends Fragment {
     View view;
     private FragmentHomeBinding binding;
     private FirebaseFirestore db;
+    private FirebaseAuth auth;
     private FirebaseUser user;
     private Button selectContainerButton;
 
@@ -55,15 +59,37 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         view = binding.getRoot();
 
-        db = FirebaseFirestore.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        // Controlla se è la prima volta che l'app viene aperta
+        if (isFirstTime()) {
+            // Se è la prima volta, avvia la FirstOnboardingActivity
+            Intent intent = new Intent(getActivity(), com.example.rain.onboarding.FirstOnboardingActivity.class);
+            startActivity(intent);
+            requireActivity().finish();
+            return null;
+            //finish(); // Chiudi la MainActivity per evitare che l'utente torni indietro
+        }
+
+        // Inizializza Firebase Authentication
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+
+        // Verifica se l'utente è autenticato
+        if (user == null) {
+            // Se non è autenticato, reindirizza alla schermata di login
+            startActivity(new Intent(getActivity(), com.example.rain.login.LoginActivity.class));
+            requireActivity().finish(); // Chiudi l'attività corrente
+            return null;
+        }
+
+        // Ora possiamo accedere all'UID dell'utente in modo sicuro
         String userId = user.getUid();
 
+        db = FirebaseFirestore.getInstance();
         // Carica il nome dell'utente
         db.collection("users").document(userId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
+                if (binding != null && documentSnapshot.exists()) {
                     binding.userName.setText(documentSnapshot.getString("firstName"));
                 }
             }
@@ -150,29 +176,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
 
-        /*db.collection("users").document(userId).collection("containers").get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            double sum = 0;
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                sum += document.getDouble("currentVolume");
-                            }
-                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2fL", sum/1000));
-                        }
-                        else {
-                            Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Snackbar.make(view, "Errore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                    }
-                });*/
-
         WeatherUtils.getLocation(db, user, new OneElementCallback<String>() {
             @Override
             public void onSuccess(String location) {
@@ -218,5 +221,22 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private boolean isFirstTime() {
+        // Ottieni le SharedPreferences usando il contesto del Fragment
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE);
+
+        // Controlla se è la prima volta (di default è true)
+        boolean isFirstTime = sharedPreferences.getBoolean("isFirstTime", true);
+
+        if (isFirstTime) {
+            // Aggiorna il valore nelle SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isFirstTime", false);
+            editor.apply();
+        }
+
+        return isFirstTime;
     }
 }

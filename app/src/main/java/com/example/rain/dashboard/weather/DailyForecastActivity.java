@@ -2,6 +2,7 @@ package com.example.rain.dashboard.weather;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -11,6 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.rain.R;
 import com.example.rain.databinding.ActivityDailyForecastBinding;
 import com.example.rain.items.HourlyWeatherItem;
 import com.example.rain.recyclerview.WeatherAdapter;
@@ -43,6 +45,9 @@ public class DailyForecastActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Inizializza il pulsante Torna indietro
+        binding.comeBackButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
 
         // Recupera la lista delle previsioni meteo orarie passata tramite l'Intent.
         List<HourlyWeatherItem> hourlyWeatherItems = getIntent().getParcelableArrayListExtra("weatherList");

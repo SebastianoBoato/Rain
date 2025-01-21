@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -62,7 +63,7 @@ public class SelectContainerActivity extends AppCompatActivity {
         loadContainers();
 
         // Inizializza il pulsante Torna indietro
-        Button backButton = findViewById(R.id.comeBackButton);
+        ImageButton backButton = findViewById(R.id.comeBackButton);
         backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
 
         // Path alla collection "containers" dell'utente specifico

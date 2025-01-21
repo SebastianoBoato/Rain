@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +60,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
 
         // Inizializza il pulsante Torna indietro
-        Button backButton = findViewById(R.id.backButton);
+        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
 
         // Recupera il Container dall'Intent
@@ -86,11 +87,11 @@ public class ContainerDetailActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
+        /*if (user == null) {
             Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
             finish();
             return;
-        }
+        }*/
 
         // Percorso al documento del container
         DocumentReference containerRef = db.collection("users")

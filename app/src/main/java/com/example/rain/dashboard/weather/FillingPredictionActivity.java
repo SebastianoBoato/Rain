@@ -47,6 +47,9 @@ public class FillingPredictionActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Inizializza il pulsante Torna indietro
+        binding.comeBackButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
+
         DailyWeatherItem todayWeather = getIntent().getParcelableExtra("todayWeather");
         List<HourlyWeatherItem> hourlyWeatherItems = getIntent().getParcelableArrayListExtra("hourlyWeather");
 

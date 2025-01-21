@@ -3,6 +3,7 @@ package com.example.rain.dashboard;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.rain.R;
 import com.example.rain.databinding.ActivityMainBinding;
 import com.example.rain.login.LoginActivity;
+import com.example.rain.onboarding.FirstOnboardingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -36,20 +38,11 @@ public class MainActivity extends AppCompatActivity {
     // Autenticazione Firebase.
     private FirebaseAuth auth;
 
+    private AlertDialog permissionDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Inizializza Firebase Authentication.
-        auth = FirebaseAuth.getInstance();
-
-        // Verifica se l'utente è autenticato.
-        if (auth.getCurrentUser() == null) {
-            // Se non è autenticato, reindirizza alla schermata di login.
-            Intent intent = new Intent(MainActivity.this, com.example.rain.login.LoginActivity.class);
-            startActivity(intent);
-            finish(); // Termina MainActivity per impedire il ritorno alla schermata principale.
-        }
 
         // Richiedi permesso per inviare notifiche (necessario per Android 13+).
         requestNotificationPermission();
@@ -69,17 +62,6 @@ public class MainActivity extends AppCompatActivity {
         // Configura il Navigation Controller con la Bottom Navigation.
         NavController navController = Navigation.findNavController(this, R.id.fragmentFrame);
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
-
-        // TODO: Implementare il logout (codice preparato, ma commentato per ora).
-        /*
-        logoutButton = findViewById(R.id.logout_button);
-        logoutButton.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();  // Effettua il logout.
-            Intent intent = new Intent(MainActivity.this, com.example.rain.login.LoginActivity.class);
-            startActivity(intent);  // Torna alla schermata di login.
-            finish();  // Termina MainActivity.
-        });
-        */
     }
 
     /**
@@ -90,16 +72,42 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Verifica versione Android.
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 // Mostra un dialogo che richiede il permesso.
-                new AlertDialog.Builder(this)
-                        .setTitle("Permesso notifiche")
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Permesso notifiche")
                         .setMessage("Concedi il permesso per ricevere notifiche importanti.")
                         .setPositiveButton("OK", (dialog, which) -> {
                             // Richiede il permesso di inviare notifiche.
                             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
                         })
-                        .setNegativeButton("Annulla", null)
-                        .show();
+                        .setNegativeButton("Annulla", null);
+                permissionDialog = builder.create();
+                permissionDialog.show();
             }
         }
+    }
+
+    private boolean isFirstTime() {
+        // Ottieni le SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE);
+
+        // Controlla se è la prima volta (di default è true)
+        boolean isFirstTime = sharedPreferences.getBoolean("isFirstTime", true);
+
+        if (isFirstTime) {
+            // Aggiorna il valore nelle SharedPreferences
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isFirstTime", false);
+            editor.apply();
+        }
+
+        return isFirstTime;
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (permissionDialog != null && permissionDialog.isShowing()) {
+            permissionDialog.dismiss();
+        }
+        super.onDestroy();
     }
 }

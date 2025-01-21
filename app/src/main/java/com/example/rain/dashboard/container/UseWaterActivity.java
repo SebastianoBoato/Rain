@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,8 @@ import java.util.Map;
 public class UseWaterActivity extends AppCompatActivity {
 
     private String containerId1, containerId;
-    private Button backButton, saveButton, resetWaterButton;
+    private Button saveButton, resetWaterButton;
+    private ImageButton backButton;
     EditText waterInput;
     private double currentQuantity;
 
@@ -141,14 +143,14 @@ public class UseWaterActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
+        /*if (user == null) {
             Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
             // Reindirizza alla schermata di login
             Intent loginIntent = new Intent(this, LoginActivity.class); // Sostituisci LoginActivity con il nome della tua attività di login
             startActivity(loginIntent);
             finish(); // Termina l'attività corrente per impedire il ritorno a questa schermata
             return;
-        }
+        }*/
 
         if (containerId == null || containerId.isEmpty()) {
             Toast.makeText(this, "Errore: ID del contenitore non valido.", Toast.LENGTH_SHORT).show();

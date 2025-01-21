@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class AddContainerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_container);
 
         // Inizializza il pulsante Torna indietro
-        Button backButton = findViewById(R.id.backButton);
+        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
 
         // Inizializza Firebase

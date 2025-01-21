@@ -44,6 +44,9 @@ public class ProfileActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Inizializza il pulsante Torna indietro
+        binding.comeBackButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
+
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
@@ -65,14 +68,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Bottone per modificare i dati
         binding.editDataButton.setOnClickListener(v -> toggleEditMode());
-
-        // Bottone per tornare alla home
-        binding.backToHomeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-            intent.putExtra("navigate_to", "HomeFragment");
-            startActivity(intent);
-            finish(); // Chiudi l'activity attuale
-        });
 
         // Bottone per il logout
         binding.logoutButton.setOnClickListener(v -> {

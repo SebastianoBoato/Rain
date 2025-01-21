@@ -50,6 +50,9 @@ public class HourlyFillingPredictionActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Inizializza il pulsante Torna indietro
+        binding.comeBackButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
+
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
