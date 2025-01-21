@@ -30,12 +30,13 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/todayForecastFrame"
                 android:layout_width="match_parent"
-                android:layout_height="420dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
+                android:paddingBottom="10dp"
                 android:background="@drawable/bottom_nav_background">
 
                 <TextView
@@ -84,7 +85,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:text="Minima"
-                    android:layout_margin="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/massimaTextView"
                     app:layout_constraintStart_toEndOf="@id/weatherIcon"/>
                 <TextView
@@ -94,7 +96,8 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:text="9°C"
-                    android:layout_margin="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/weatherMaxTemp"
                     app:layout_constraintStart_toEndOf="@id/minimaTextView"/>
 
@@ -104,7 +107,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:text="Media"
-                    android:layout_margin="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/minimaTextView"
                     app:layout_constraintStart_toEndOf="@id/weatherIcon"/>
                 <TextView
@@ -114,7 +118,8 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:text="11°C"
-                    android:layout_margin="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintTop_toBottomOf="@id/weatherMinTemp"
                     app:layout_constraintStart_toEndOf="@id/mediaTextView"/>
 
@@ -125,8 +130,9 @@
                     android:text="Pioggia"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    android:layout_margin="30dp"
-                    app:layout_constraintTop_toBottomOf="@id/weatherIcon"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@id/fillingEstimate"
                     app:layout_constraintStart_toStartOf="parent"
                     android:textColor="@color/title_blue" />
 
@@ -136,7 +142,8 @@
                     android:layout_height="wrap_content"
                     android:text="Millimetri"
                     android:textSize="20sp"
-                    android:layout_margin="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@id/weatherCondition"
                     app:layout_constraintStart_toStartOf="parent"/>
                 <TextView
@@ -147,7 +154,7 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="30dp"
                     app:layout_constraintTop_toBottomOf="@id/weatherCondition"
                     app:layout_constraintStart_toEndOf="@id/millimetriTextView"/>
@@ -158,7 +165,8 @@
                     android:layout_height="wrap_content"
                     android:text="Probabilità"
                     android:textSize="20sp"
-                    android:layout_margin="30dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintTop_toBottomOf="@id/millimetriTextView"
                     app:layout_constraintStart_toStartOf="parent"/>
                 <TextView
@@ -169,27 +177,29 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="30dp"
                     app:layout_constraintTop_toBottomOf="@id/weatherPrecip"
                     app:layout_constraintStart_toEndOf="@id/probabilitaTextView"/>
 
                 <LinearLayout
                     android:id="@+id/fillingEstimate"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/weatherIcon"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_margin="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_margin="20dp"
                     android:background="@drawable/button_background"
                     android:paddingStart="10dp"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="5dp">
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="center_horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="STIMA RIEMPIMENTO\nCONTENITORI"
+                        android:text="STIMA RIEMPIMENTO CONTENITORI"
                         android:gravity="center"
                         android:textColor="@color/white"
                         android:textSize="15sp" />
