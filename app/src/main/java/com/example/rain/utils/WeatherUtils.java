@@ -266,43 +266,53 @@ public class WeatherUtils {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                        Map<String, Object> collectedVolume = new HashMap<>();
-                        collectedVolume.put("date", currentDate);
-                        collectedVolume.put("collectedVolume", 0);
-                        collection_historyRef.add(collectedVolume).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference collectedVolumeDocRef) {
-                                double totalCollectedVolume = 0;
+                        collection_historyRef.whereEqualTo("date", currentDate).get()
+                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-                                if (!queryDocumentSnapshots.isEmpty()) {
-                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        if (queryDocumentSnapshots.isEmpty()) {
+                                            Map<String, Object> collectedVolume = new HashMap<>();
+                                            collectedVolume.put("date", currentDate);
+                                            collectedVolume.put("collectedVolume", 0);
 
-                                        double area;
-                                        if (document.get("roofArea") != null) {
-                                            area = document.getDouble("roofArea") * 10000;
+                                            collection_historyRef.add(collectedVolume).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                @Override
+                                                public void onSuccess(DocumentReference collectedVolumeDocRef) {
+                                                    double totalCollectedVolume = 0;
+
+                                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+
+                                                            double area;
+                                                            if (document.get("roofArea") != null) {
+                                                                area = document.getDouble("roofArea") * 10000;
+                                                            }
+                                                            else {
+                                                                area = document.getDouble("baseArea");
+                                                            }
+
+                                                            double containerTotalVolume = document.getDouble("totalVolume") / 1000;
+                                                            double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
+                                                            double containerVolumeIncrease = ( area * (todayWeather.getPrecip() / 10) ) / 1000;
+                                                            double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
+
+                                                            // rendo i valori reali in base alla capienza del contenitore
+                                                            containerPredictionVolume = Math.min(containerPredictionVolume, containerTotalVolume);
+                                                            containerVolumeIncrease = containerPredictionVolume - containerCurrentVolume;
+                                                            totalCollectedVolume += containerVolumeIncrease;
+
+                                                            DocumentReference containerDocRef = containersRef.document(document.getId());
+                                                            containerDocRef.update("currentVolume", containerPredictionVolume);
+
+                                                            collectedVolumeDocRef.update("collectedVolume", totalCollectedVolume);
+                                                        }
+                                                    }
+                                                }
+                                            });
                                         }
-                                        else {
-                                            area = document.getDouble("baseArea");
-                                        }
-
-                                        double containerTotalVolume = document.getDouble("totalVolume") / 1000;
-                                        double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
-                                        double containerVolumeIncrease = ( area * (todayWeather.getPrecip() / 10) ) / 1000;
-                                        double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
-
-                                        // rendo i valori reali in base alla capienza del contenitore
-                                        containerPredictionVolume = Math.min(containerPredictionVolume, containerTotalVolume);
-                                        containerVolumeIncrease = containerPredictionVolume - containerCurrentVolume;
-                                        totalCollectedVolume += containerVolumeIncrease;
-
-                                        DocumentReference containerDocRef = containersRef.document(document.getId());
-                                        containerDocRef.update("currentVolume", containerPredictionVolume);
-
-                                        collectedVolumeDocRef.update("collectedVolume", totalCollectedVolume);
                                     }
-                                }
-                            }
-                        });
+                                });
                     }
                 });
     }
