@@ -202,6 +202,7 @@ public class UseWaterActivity extends AppCompatActivity {
         Map<String, Object> usageHistory = new HashMap<>();
         usageHistory.put("date", formattedDate);
         usageHistory.put("usedVolume", waterUsed);
+        usageHistory.put("timestamp", FieldValue.serverTimestamp());
 
         db.collection("users")
                 .document(userId)
