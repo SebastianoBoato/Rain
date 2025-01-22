@@ -13,15 +13,14 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.rain.R;
 import com.example.rain.login.LoginActivity;
-import com.example.rain.login.RegisterActivity;
 
-public class FirstOnboardingActivity extends AppCompatActivity {
+public class SecondOnboardingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_first_onboarding);
+        setContentView(R.layout.activity_second_onboarding);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -32,7 +31,7 @@ public class FirstOnboardingActivity extends AppCompatActivity {
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstOnboardingActivity.this, SecondOnboardingActivity.class);
+                Intent intent = new Intent(SecondOnboardingActivity.this, ThirdOnboardingActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -42,7 +41,7 @@ public class FirstOnboardingActivity extends AppCompatActivity {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FirstOnboardingActivity.this, LoginActivity.class);
+                Intent intent = new Intent(SecondOnboardingActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

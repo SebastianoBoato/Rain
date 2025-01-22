@@ -75,6 +75,20 @@
             android:background="?android:attr/selectableItemBackground"
             android:importantForAccessibility="yes" />
 
+        <!-- Link per la registrazione -->
+        <TextView
+            android:id="@+id/onboarding_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vuoi rivedere come funziona l'app? [Scopri di più]"
+            android:textColor="#005596"
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:importantForAccessibility="yes" />
+
     </LinearLayout>
 
 

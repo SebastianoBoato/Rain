@@ -15,11 +15,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.rain.R;
+import com.example.rain.onboarding.FirstOnboardingActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextView registerLink;
+    private TextView registerLink, onboardingLink;
 
     private EditText emailField, passwordField;
     private Button loginButton;
@@ -48,6 +49,15 @@ public class LoginActivity extends AppCompatActivity {
         registerLink.setOnClickListener(v -> {
             // Avvia la RegisterActivity
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
+
+        // Inizializza il TextView per il link di registrazione
+        onboardingLink = findViewById(R.id.onboarding_link);
+        // Imposta il listener sul link di registrazione
+        onboardingLink.setOnClickListener(v -> {
+            // Avvia la RegisterActivity
+            Intent intent = new Intent(LoginActivity.this, FirstOnboardingActivity.class);
             startActivity(intent);
         });
 

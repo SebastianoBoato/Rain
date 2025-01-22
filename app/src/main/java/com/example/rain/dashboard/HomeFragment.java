@@ -121,7 +121,9 @@ public class HomeFragment extends Fragment {
                                     sumCurrentVolume += document.getDouble("currentVolume");
                                 }
                             }
-                            binding.currentTotalVolume.setText(String.format(Locale.US, "%.2f", sumCurrentVolume) + " L"); // Converti in Litri
+                            if (binding != null){
+                                binding.currentTotalVolume.setText(String.format(Locale.US, "%.2f", sumCurrentVolume) + " L"); // Converti in Litri
+                            }
                         } else {
                             Snackbar.make(view, "Nessun contenitore trovato", Snackbar.LENGTH_LONG).show();
                         }
@@ -145,9 +147,11 @@ public class HomeFragment extends Fragment {
                                     sumCollectedWater += document.getDouble("collectedVolume");
                                 }
                             }
-                            binding.lifetimeCollectedVolume.setText(String.format(Locale.US, "%.2f", sumCollectedWater) + " L"); // Converti in Litri
+                            if (binding != null){
+                                binding.lifetimeCollectedVolume.setText(String.format(Locale.US, "%.2f", sumCollectedWater) + " L"); // Converti in Litri
+                            }
                         } else {
-                            Snackbar.make(view, "Non trovata l'acqua utilizzata", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(view, "Non trovata l'acqua raccolta", Snackbar.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -169,7 +173,9 @@ public class HomeFragment extends Fragment {
                                     sumUsedWater += document.getDouble("usedVolume");
                                 }
                             }
-                            binding.lifetimeUsedVolume.setText(String.format(Locale.US, "%.2f", sumUsedWater) + " L"); // Converti in Litri
+                            if (binding != null){
+                                binding.lifetimeUsedVolume.setText(String.format(Locale.US, "%.2f", sumUsedWater) + " L"); // Converti in Litri
+                            }
                         } else {
                             Snackbar.make(view, "Non trovata l'acqua utilizzata", Snackbar.LENGTH_LONG).show();
                         }
