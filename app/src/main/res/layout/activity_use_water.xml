@@ -7,9 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".dashboard.container.UseWaterActivity"
     android:background="#FAFAFA"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_marginTop="40dp">
 
-    <!-- Bottone con immagine (freccia) -->
+
+<!-- Bottone con immagine (freccia) -->
     <ImageButton
         android:id="@+id/comeBackButton"
         android:layout_width="32dp"

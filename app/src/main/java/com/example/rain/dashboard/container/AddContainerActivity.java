@@ -67,7 +67,7 @@ public class AddContainerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_container);
 
         // Inizializza il pulsante Torna indietro
-        Button backButton = findViewById(R.id.backButton);
+        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(v -> finish()); // Chiude l'Activity e torna indietro
 
         // Inizializza Firebase
