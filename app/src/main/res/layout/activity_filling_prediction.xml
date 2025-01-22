@@ -27,7 +27,7 @@
         android:layout_margin="15dp"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:text="Stime riempiimento"
+        android:text="Stime riempimento"
         android:textColor="@color/title_blue" />
 
     <TextView

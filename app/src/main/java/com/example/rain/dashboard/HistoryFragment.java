@@ -48,7 +48,7 @@ public class HistoryFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        db.collection("users").document(user.getUid()).collection("collection_history").get()
+        db.collection("users").document(user.getUid()).collection("collection_history").orderBy("timestamp").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -113,7 +113,7 @@ public class HistoryFragment extends Fragment {
                     }
                 });
 
-        db.collection("users").document(user.getUid()).collection("usage_history").get()
+        db.collection("users").document(user.getUid()).collection("usage_history").orderBy("timestamp").get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

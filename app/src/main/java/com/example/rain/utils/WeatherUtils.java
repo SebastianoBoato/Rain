@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -221,22 +222,22 @@ public class WeatherUtils {
 
         double area;
         if (document.get("roofArea") != null) {
-            area = document.getDouble("roofArea") * 10000;
+            area = document.getDouble("roofArea");
         }
         else {
-            area = document.getDouble("baseArea");
+            area = document.getDouble("baseArea") / 10000;
         }
 
         String containerName = document.getString("name");
         String containerShape = document.getString("shape");
-        double containerTotalVolume = document.getDouble("totalVolume") / 1000;
-        double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
+        double containerTotalVolume = document.getDouble("totalVolume");
+        double containerCurrentVolume = document.getDouble("currentVolume");
 
 
         double containerPredictionVolume = containerCurrentVolume;
         for (HourlyWeatherItem item : hourlyWeatherItems) {
             //if (Integer.parseInt(item.getTime().substring(0, 2)) >= hour ) { USEREI QUESTO SE VOLESSI PARTIRE DALL'ORA ATTUALE
-                containerPredictionVolume += ( (item.getPrecip() / 10) * area ) / 1000;
+                containerPredictionVolume += ( (item.getPrecip() / 1000) * area ) * 1000;
             //}
         }
 
@@ -275,6 +276,7 @@ public class WeatherUtils {
                                             Map<String, Object> collectedVolume = new HashMap<>();
                                             collectedVolume.put("date", currentDate);
                                             collectedVolume.put("collectedVolume", 0);
+                                            collectedVolume.put("timestamp", FieldValue.serverTimestamp());
 
                                             collection_historyRef.add(collectedVolume).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                 @Override
@@ -286,15 +288,15 @@ public class WeatherUtils {
 
                                                             double area;
                                                             if (document.get("roofArea") != null) {
-                                                                area = document.getDouble("roofArea") * 10000;
+                                                                area = document.getDouble("roofArea");
                                                             }
                                                             else {
-                                                                area = document.getDouble("baseArea");
+                                                                area = document.getDouble("baseArea") / 10000;
                                                             }
 
-                                                            double containerTotalVolume = document.getDouble("totalVolume") / 1000;
-                                                            double containerCurrentVolume = document.getDouble("currentVolume") / 1000;
-                                                            double containerVolumeIncrease = ( area * (todayWeather.getPrecip() / 10) ) / 1000;
+                                                            double containerTotalVolume = document.getDouble("totalVolume");
+                                                            double containerCurrentVolume = document.getDouble("currentVolume");
+                                                            double containerVolumeIncrease = ( area * (todayWeather.getPrecip() / 1000) ) * 1000;
                                                             double containerPredictionVolume = containerCurrentVolume + containerVolumeIncrease;
 
                                                             // rendo i valori reali in base alla capienza del contenitore
@@ -331,10 +333,10 @@ public class WeatherUtils {
                             DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                             double area;
                             if (documentSnapshot.get("roofArea") != null) {
-                                area = documentSnapshot.getDouble("roofArea") * 10000;
+                                area = documentSnapshot.getDouble("roofArea");
                             }
                             else {
-                                area = documentSnapshot.getDouble("baseArea");
+                                area = documentSnapshot.getDouble("baseArea") / 10000;
                             }
                             callback.onSuccess(area);
                         }

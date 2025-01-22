@@ -98,7 +98,7 @@ public class HourlyFillingPredictionActivity extends AppCompatActivity {
                 */
 
                 for (HourlyWeatherItem item : hourlyWeatherItems) {
-                    increase += ( (item.getPrecip() / 10) * area ) / 1000;
+                    increase += ( (item.getPrecip() / 1000) * area ) * 1000;
                     if (increase > containerTotalVolume) { increase = containerTotalVolume; }
                     hourlyFillingPredictionItems.add(new HourlyFillingPredictionItem(item.getTime(), increase));
                 }
