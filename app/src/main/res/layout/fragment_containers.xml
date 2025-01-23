@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,30 +14,42 @@
         android:textSize="35sp"
         android:textStyle="bold"
         android:textColor="@color/title_blue"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="16dp"/>
 
     <!-- Pulsante per aggiungere un nuovo contenitore -->
     <Button
         android:id="@+id/addContainerButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Aggiungi Contenitore"
         android:backgroundTint="#005596"
         android:textColor="@android:color/white"
         android:layout_below="@id/titleText"
-        android:layout_centerHorizontal="true"/>
+        android:layout_marginTop="16dp"/>
+
+    <!-- Testo descrittivo sopra il RecyclerView -->
+    <TextView
+        android:id="@+id/descriptionText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textStyle="bold"
+    android:textSize="16sp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginTop="6dp"
+    android:text="Ecco alcune idee su come puoi utilizzare al meglio l'acqua che hai raccolto!"
+    android:textColor="@color/title_blue"
+    android:layout_below="@id/addContainerButton"/>
 
     <!-- RecyclerView per visualizzare i contenitori -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/containerRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/addContainerButton"
-        android:layout_marginTop="16dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        android:scrollbars="vertical" />
+        android:layout_below="@id/descriptionText"
+    android:layout_marginTop="16dp"
+    android:clipToPadding="false"
+    android:padding="8dp"
+    android:scrollbars="vertical" />
 
 </RelativeLayout>

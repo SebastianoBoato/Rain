@@ -110,10 +110,10 @@ public class ProfileActivity extends AppCompatActivity {
                                 Double latitude = (Double) location.get("latitude");
                                 Double longitude = (Double) location.get("longitude");
 
-                                binding.addressValue.setText(String.format("Indirizzo: %s", address != null ? address : "N/A"));
-                                binding.cityValue.setText(String.format("Città: %s", city != null ? city : "N/A"));
-                                binding.provinceValue.setText(String.format("Provincia: %s", province != null ? province : "N/A"));
-                                binding.postalCodeValue.setText(String.format("Codice postale: %s", postalCode != null ? postalCode : "N/A"));
+                                binding.addressValue.setText(String.format("Indirizzo   %s", address != null ? address : "N/A"));
+                                binding.cityValue.setText(String.format("Città   %s", city != null ? city : "N/A"));
+                                binding.provinceValue.setText(String.format("Provincia   %s", province != null ? province : "N/A"));
+                                binding.postalCodeValue.setText(String.format("Codice postale   %s", postalCode != null ? postalCode : "N/A"));
                                 binding.coordinatesValue.setText((latitude != null && longitude != null) ?
                                         "Lat: " + latitude + ", Lon: " + longitude : "N/A");
                             }
