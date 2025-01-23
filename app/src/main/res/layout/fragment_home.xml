@@ -29,7 +29,7 @@
         app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintBottom_toBottomOf="@id/profileImage"
         android:layout_margin="20dp"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:text="Buongiorno, " />
     <TextView
         android:id="@+id/userName"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="@id/buongiornoTextView"
         app:layout_constraintStart_toEndOf="@id/buongiornoTextView"
         app:layout_constraintBottom_toBottomOf="@id/buongiornoTextView"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         android:text="Utente" />
 
@@ -103,7 +103,7 @@
             android:id="@+id/lifetimeCollectedVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="3994.4L"
+            android:text="0.0L"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginStart="15dp"
@@ -124,7 +124,7 @@
             android:id="@+id/lifetimeUsedVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2669.1L"
+            android:text="0.0L"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginStart="15dp"

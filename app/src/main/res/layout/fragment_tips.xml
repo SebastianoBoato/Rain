@@ -25,7 +25,7 @@
                 android:text="Consigli sull'uso dell'Acqua Piovana"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:textColor="#1A5F7A"
+                android:textColor="@color/title_blue"
                 android:gravity="center"
                 android:layout_marginBottom="16dp"/>
 

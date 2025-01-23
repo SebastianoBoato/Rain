@@ -26,7 +26,7 @@
         android:backgroundTint="#005596"
         android:textColor="@android:color/white"
         android:layout_below="@id/titleText"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="0dp"/>
 
     <!-- Testo descrittivo sopra il RecyclerView -->
     <TextView
@@ -35,9 +35,9 @@
     android:layout_height="wrap_content"
     android:textStyle="bold"
     android:textSize="16sp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginTop="6dp"
-    android:text="Ecco alcune idee su come puoi utilizzare al meglio l'acqua che hai raccolto!"
+    android:layout_marginBottom="0dp"
+    android:layout_marginTop="16dp"
+    android:text="Ecco i contenitori che hai aggiunto!"
     android:textColor="@color/title_blue"
     android:layout_below="@id/addContainerButton"/>
 

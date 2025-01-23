@@ -2,9 +2,13 @@ package com.example.rain.dashboard.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -13,11 +17,19 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.rain.R;
 import com.example.rain.dashboard.MainActivity;
+import com.example.rain.dashboard.container.Container;
 import com.example.rain.databinding.ActivityProfileBinding;
 import com.example.rain.login.LoginActivity;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,17 +61,61 @@ public class ProfileActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-
-        // Controlla se l'utente è autenticato
-        if (user != null) {
-            String userId = user.getUid();
-            loadUserData(userId);
-        } else {
-            binding.userName.setText("Utente non autenticato");
+        if(user == null){
+            Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
+        db = FirebaseFirestore.getInstance();
+        String userId = user.getUid();
+        loadUserData(userId);
 
         setupButtons();
+
+        // Percorso al documento dell'utente
+        DocumentReference userDataRef = db.collection("users")
+                .document(userId);
+
+        // Aggiungi un listener in tempo reale per aggiornare dati utente
+        userDataRef.addSnapshotListener((snapshot, error) -> {
+            if (error != null) {
+                Log.e("Firestore", "Errore nel listener: " + error.getMessage());
+                return;
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                // Aggiorna i dati dell'interfaccia
+                String firstName = snapshot.getString("firstName");
+                String lastName = snapshot.getString("lastName");
+                String email = snapshot.getString("email");
+
+                if (firstName != null && lastName != null) {
+                    binding.userName.setText(firstName + " " + lastName);
+                    binding.nameValue.setText("Nome: " + firstName);
+                    binding.surnameValue.setText("Cognome: " + lastName);
+                }
+                if (email != null) {
+                    binding.emailValue.setText("Email: " + email);
+                }
+
+                if (snapshot.contains("location")) {
+                    Map<String, Object> location = (Map<String, Object>) snapshot.get("location");
+                    if (location != null) {
+                        String address = (String) location.get("address");
+                        String city = (String) location.get("city");
+                        String province = (String) location.get("province");
+                        String postalCode = (String) location.get("cap");
+                        String civic = (String) location.get("civic");
+
+                        binding.addressValue.setText(String.format("Indirizzo: %s", address!=null && civic!=null ? address+" "+civic : "N/A"));
+                        binding.cityValue.setText(String.format("Città: %s", city != null ? city : "N/A"));
+                        binding.provinceValue.setText(String.format("Provincia: %s", province != null ? province : "N/A"));
+                        binding.postalCodeValue.setText(String.format("Codice postale: %s", postalCode != null ? postalCode : "N/A"));
+                    }
+                }
+            }
+        });
+
     }
 
     private void setupButtons() {
@@ -79,6 +135,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Bottone per eliminare l'account
         binding.deleteAccountButton.setOnClickListener(v -> showDeleteAccountConfirmationDialog());
+
+        //Bottone per cambio password
+        binding.editPasswordButton.setOnClickListener(v -> showChangePasswordDialog());
     }
 
     private void loadUserData(String userId) {
@@ -88,16 +147,14 @@ public class ProfileActivity extends AppCompatActivity {
                         String firstName = documentSnapshot.getString("firstName");
                         String lastName = documentSnapshot.getString("lastName");
                         String email = documentSnapshot.getString("email");
-                        String phone = documentSnapshot.getString("phone");
 
                         if (firstName != null && lastName != null) {
                             binding.userName.setText(firstName + " " + lastName);
+                            binding.nameValue.setText("Nome: " + firstName);
+                            binding.surnameValue.setText("Cognome: " + lastName);
                         }
                         if (email != null) {
-                            binding.emailValue.setText(email);
-                        }
-                        if (phone != null) {
-                            binding.phoneValue.setText(phone);
+                            binding.emailValue.setText("Email: " + email);
                         }
 
                         if (documentSnapshot.contains("location")) {
@@ -106,16 +163,13 @@ public class ProfileActivity extends AppCompatActivity {
                                 String address = (String) location.get("address");
                                 String city = (String) location.get("city");
                                 String province = (String) location.get("province");
-                                String postalCode = (String) location.get("postalCode");
-                                Double latitude = (Double) location.get("latitude");
-                                Double longitude = (Double) location.get("longitude");
+                                String postalCode = (String) location.get("cap");
+                                String civic = (String) location.get("civic");
 
-                                binding.addressValue.setText(String.format("Indirizzo   %s", address != null ? address : "N/A"));
-                                binding.cityValue.setText(String.format("Città   %s", city != null ? city : "N/A"));
-                                binding.provinceValue.setText(String.format("Provincia   %s", province != null ? province : "N/A"));
-                                binding.postalCodeValue.setText(String.format("Codice postale   %s", postalCode != null ? postalCode : "N/A"));
-                                binding.coordinatesValue.setText((latitude != null && longitude != null) ?
-                                        "Lat: " + latitude + ", Lon: " + longitude : "N/A");
+                                binding.addressValue.setText(String.format("Indirizzo: %s", address!=null && civic!=null ? address+" "+civic : "N/A"));
+                                binding.cityValue.setText(String.format("Città: %s", city != null ? city : "N/A"));
+                                binding.provinceValue.setText(String.format("Provincia: %s", province != null ? province : "N/A"));
+                                binding.postalCodeValue.setText(String.format("Codice postale: %s", postalCode != null ? postalCode : "N/A"));
                             }
                         }
                     } else {
@@ -136,14 +190,14 @@ public class ProfileActivity extends AppCompatActivity {
     private void toggleEditMode() {
         if (!isEditing) {
             // Mostra i campi di modifica
-            binding.emailEditText.setVisibility(View.VISIBLE);
-            binding.phoneEditText.setVisibility(View.VISIBLE);
+            binding.nameValue.setVisibility(View.VISIBLE);
+            binding.surnameValue.setVisibility(View.VISIBLE);
+            binding.nameEditText.setVisibility(View.VISIBLE);
+            binding.surnameEditText.setVisibility(View.VISIBLE);
             binding.addressEditText.setVisibility(View.VISIBLE);
             binding.cityEditText.setVisibility(View.VISIBLE);
             binding.provinceEditText.setVisibility(View.VISIBLE);
             binding.postalCodeEditText.setVisibility(View.VISIBLE);
-            binding.latitudeEditText.setVisibility(View.VISIBLE);
-            binding.longitudeEditText.setVisibility(View.VISIBLE);
 
             // Cambia il testo del pulsante
             binding.editDataButton.setText("Salva Dati");
@@ -153,14 +207,14 @@ public class ProfileActivity extends AppCompatActivity {
             saveUserData();
 
             // Nascondi i campi di modifica
-            binding.emailEditText.setVisibility(View.GONE);
-            binding.phoneEditText.setVisibility(View.GONE);
+            binding.nameValue.setVisibility(View.GONE);
+            binding.surnameValue.setVisibility(View.GONE);
+            binding.nameEditText.setVisibility(View.GONE);
+            binding.surnameEditText.setVisibility(View.GONE);
             binding.addressEditText.setVisibility(View.GONE);
             binding.cityEditText.setVisibility(View.GONE);
             binding.provinceEditText.setVisibility(View.GONE);
             binding.postalCodeEditText.setVisibility(View.GONE);
-            binding.latitudeEditText.setVisibility(View.GONE);
-            binding.longitudeEditText.setVisibility(View.GONE);
 
             // Cambia il testo del pulsante
             binding.editDataButton.setText("Modifica Dati");
@@ -169,29 +223,22 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveUserData() {
-        String email = binding.emailEditText.getText().toString().trim();
-        String phone = binding.phoneEditText.getText().toString().trim();
+        String name = binding.nameEditText.getText().toString().trim();
+        String surname = binding.surnameEditText.getText().toString().trim();
         String address = binding.addressEditText.getText().toString().trim();
         String city = binding.cityEditText.getText().toString().trim();
         String province = binding.provinceEditText.getText().toString().trim();
         String postalCode = binding.postalCodeEditText.getText().toString().trim();
-        String latitudeStr = binding.latitudeEditText.getText().toString().trim();
-        String longitudeStr = binding.longitudeEditText.getText().toString().trim();
-
-        Double latitude = latitudeStr.isEmpty() ? null : Double.parseDouble(latitudeStr);
-        Double longitude = longitudeStr.isEmpty() ? null : Double.parseDouble(longitudeStr);
 
         Map<String, Object> updates = new HashMap<>();
-        if (!email.isEmpty()) updates.put("email", email);
-        if (!phone.isEmpty()) updates.put("phone", phone);
+        if (!name.isEmpty()) updates.put("firstName", name);
+        if (!surname.isEmpty()) updates.put("lastName", surname);
 
         Map<String, Object> location = new HashMap<>();
         if (!address.isEmpty()) location.put("address", address);
         if (!city.isEmpty()) location.put("city", city);
         if (!province.isEmpty()) location.put("province", province);
-        if (!postalCode.isEmpty()) location.put("postalCode", postalCode);
-        if (latitude != null) location.put("latitude", latitude);
-        if (longitude != null) location.put("longitude", longitude);
+        if (!postalCode.isEmpty()) location.put("cap", postalCode);
 
         if (!location.isEmpty()) updates.put("location", location);
 
@@ -286,5 +333,69 @@ public class ProfileActivity extends AppCompatActivity {
                             "Errore durante l'eliminazione dei dati: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
                 });
+    }
+
+    private void showChangePasswordDialog() {
+        // Crea il layout del dialog
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_password, null);
+        EditText currentPasswordEditText = dialogView.findViewById(R.id.currentPasswordEditText);
+        EditText newPasswordEditText = dialogView.findViewById(R.id.newPasswordEditText);
+        EditText confirmPasswordEditText = dialogView.findViewById(R.id.confirmPasswordEditText);
+
+        // Mostra il dialog
+        new AlertDialog.Builder(this)
+                .setTitle("Modifica Password")
+                .setView(dialogView)
+                .setPositiveButton("Conferma", (dialog, which) -> {
+                    String currentPassword = currentPasswordEditText.getText().toString().trim();
+                    String newPassword = newPasswordEditText.getText().toString().trim();
+                    String confirmPassword = confirmPasswordEditText.getText().toString().trim();
+
+                    if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
+                        Toast.makeText(ProfileActivity.this, "Tutti i campi devono essere compilati", Toast.LENGTH_SHORT).show();
+                    } else if (!newPassword.equals(confirmPassword)) {
+                        Toast.makeText(ProfileActivity.this, "Le password non corrispondono", Toast.LENGTH_SHORT).show();
+                    } else {
+                        reauthenticateAndChangePassword(currentPassword, newPassword);
+                    }
+                })
+                .setNegativeButton("Annulla", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+
+    private void reauthenticateAndChangePassword(String currentPassword, String newPassword) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+
+            user.reauthenticate(credential)
+                    .addOnSuccessListener(aVoid -> {
+                        // Password corretta, procedi con la modifica della password
+                        changePassword(newPassword);
+                    })
+                    .addOnFailureListener(e -> {
+                        // Se la ri-autenticazione fallisce (password errata)
+                        Toast.makeText(ProfileActivity.this, "La password corrente è errata", Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(ProfileActivity.this, "Utente non autenticato", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void changePassword(String newPassword) {
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null) {
+            user.updatePassword(newPassword)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(ProfileActivity.this, "Password modificata con successo!", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(ProfileActivity.this, "Errore durante la modifica della password: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        } else {
+            Toast.makeText(ProfileActivity.this, "Utente non autenticato", Toast.LENGTH_SHORT).show();
+        }
     }
 }

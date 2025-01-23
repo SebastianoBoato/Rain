@@ -70,7 +70,7 @@ public class TipsFragment extends Fragment {
                                         // - userName : nome dell'utente
                                         // - sumCurrentVolume : volume totale di acqua tra tutti i contenitori
                                         if (binding != null) {
-                                            binding.currentTotalVolume.setText(String.format(Locale.US, "Ehi %s! Il tuo volume di acqua è di %.2f", userName, sumCurrentVolume) + " L\uD83D\uDCA7");
+                                            binding.currentTotalVolume.setText(String.format(Locale.US, "Ehi %s! La tua quantità di acqua disponibile è di %.2f", userName, sumCurrentVolume) + " L\uD83D\uDCA7");
 
                                             // Clear previous tips
                                             binding.tipsContainer.removeAllViews();

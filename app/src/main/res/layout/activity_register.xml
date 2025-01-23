@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAFAFA"
     tools:context=".login.RegisterActivity">
 
     <ScrollView
@@ -87,15 +88,6 @@
                     android:textColor="@color/black"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Preferenza Notifiche -->
-            <Switch
-                android:id="@+id/notification_preference"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ricevere notifiche"
-                android:textColor="@color/blue_accent"
-                android:layout_marginTop="16dp" />
-
             <!-- Check se l'utente è vicino ai serbatoi -->
             <CheckBox
                 android:id="@+id/nearby_checkbox"
@@ -106,6 +98,21 @@
                 android:textColor="@color/blue_accent" />
 
             <!-- Campi di posizione manuale -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/province_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Provincia"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/province_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/location_layout"
                 android:layout_width="match_parent"

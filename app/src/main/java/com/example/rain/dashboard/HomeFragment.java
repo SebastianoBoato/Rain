@@ -104,6 +104,32 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Aggiungi listener per la modifica in tempo reale del campo firstName
+        db.collection("users").document(userId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Snackbar.make(view, "Errore: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+                            String firstName = documentSnapshot.getString("firstName");
+                            if (firstName != null) {
+                                if (binding != null) {
+                                    binding.userName.setText(firstName);
+                                }
+                            } else {
+                                Snackbar.make(view, "Nome non trovato", Snackbar.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Snackbar.make(view, "Documento utente non trovato", Snackbar.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+
         // Aggiungi listener per la modifica in tempo reale dei contenitori
         db.collection("users").document(userId).collection("containers")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {

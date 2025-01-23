@@ -29,14 +29,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputEditText emailField, firstNameField, lastNameField, passwordField, locationField, cityField, addressField, civicField, capField;
-    private Switch notificationPreference;
+    private TextInputEditText emailField, firstNameField, lastNameField, passwordField, locationField, cityField, addressField, civicField, capField, provinceField;
     private CheckBox nearbyCheckbox;
     private Button registerButton, goToLoginButton;
     private FusedLocationProviderClient fusedLocationClient;
@@ -45,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore db; // Firebase Firestore
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1; // Codice di richiesta permesso
+    private static final String API_KEY = "f9b1fdde170b4dbb9585f0d558b4c2db"; // Sostituisci con la tua API Key OpenCage
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +64,8 @@ public class RegisterActivity extends AppCompatActivity {
         firstNameField = findViewById(R.id.first_name);
         lastNameField = findViewById(R.id.last_name);
         passwordField = findViewById(R.id.password);
-        notificationPreference = findViewById(R.id.notification_preference);
         nearbyCheckbox = findViewById(R.id.nearby_checkbox);
+        provinceField = findViewById(R.id.province_field);
         cityField = findViewById(R.id.city_field);
         addressField = findViewById(R.id.address_field);
         civicField = findViewById(R.id.civic_field);
@@ -93,12 +101,14 @@ public class RegisterActivity extends AppCompatActivity {
     private void toggleLocationFieldsVisibility(boolean isNearby) {
         if (isNearby) {
             // Nascondi i campi di posizione manuale
+            findViewById(R.id.province_layout).setVisibility(View.GONE);
             findViewById(R.id.location_layout).setVisibility(View.GONE);
             findViewById(R.id.address_layout).setVisibility(View.GONE);
             findViewById(R.id.civic_layout).setVisibility(View.GONE);
             findViewById(R.id.cap_layout).setVisibility(View.GONE);
         } else {
             // Mostra i campi di posizione manuale
+            findViewById(R.id.province_layout).setVisibility(View.VISIBLE);
             findViewById(R.id.location_layout).setVisibility(View.VISIBLE);
             findViewById(R.id.address_layout).setVisibility(View.VISIBLE);
             findViewById(R.id.civic_layout).setVisibility(View.VISIBLE);
@@ -111,8 +121,8 @@ public class RegisterActivity extends AppCompatActivity {
         String firstName = firstNameField.getText().toString();
         String lastName = lastNameField.getText().toString();
         String password = passwordField.getText().toString();
-        boolean notificationsEnabled = notificationPreference.isChecked();
         boolean isNearby = nearbyCheckbox.isChecked();
+        String province = provinceField.getText().toString();
         String city = cityField.getText().toString();
         String address = addressField.getText().toString();
         String civic = civicField.getText().toString();
@@ -143,6 +153,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Verifica campi posizione se la checkbox non è selezionata
         if (!isNearby) {
+            if (province.isEmpty()) {
+                provinceField.setError("Inserisci la provincia");
+                hasError = true;
+            }
+
             if (city.isEmpty()) {
                 cityField.setError("Inserisci la città");
                 hasError = true;
@@ -180,8 +195,6 @@ public class RegisterActivity extends AppCompatActivity {
                         userData.put("email", email);
                         userData.put("firstName", firstName);
                         userData.put("lastName", lastName);
-                        //userData.put("password", password);
-                        userData.put("notificationsEnabled", notificationsEnabled);
 
                         // Salva i dati aggiuntivi in Firestore
                         if (isNearby) {
@@ -198,19 +211,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnSuccessListener(location -> {
                                         if (location != null) {
                                             // Aggiungi la posizione GPS a userData
-                                            Map<String, Double> locationMap = new HashMap<>();
-                                            locationMap.put("latitude", location.getLatitude());
-                                            locationMap.put("longitude", location.getLongitude());
-                                            userData.put("location", locationMap);
-
-                                            // Salva i dati con la posizione GPS
-                                            db.collection("users").document(userId)
-                                                    .set(userData)
-                                                    .addOnSuccessListener(aVoid -> {
-                                                        Toast.makeText(RegisterActivity.this, "Registrazione completata!", Toast.LENGTH_SHORT).show();
-                                                        //finish(); // Torna alla schermata precedente
-                                                    })
-                                                    .addOnFailureListener(e -> Toast.makeText(RegisterActivity.this, "Errore durante il salvataggio dei dati.", Toast.LENGTH_SHORT).show());
+                                            getAddressFromCoordinates(email, firstName, lastName, location.getLatitude(), location.getLongitude());
                                         } else {
                                             Toast.makeText(RegisterActivity.this, "Impossibile ottenere la posizione", Toast.LENGTH_SHORT).show();
                                         }
@@ -218,6 +219,7 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             // Usa i dati manuali per la posizione
                             Map<String, String> locationMap = new HashMap<>();
+                            locationMap.put("province", province);
                             locationMap.put("city", city);
                             locationMap.put("address", address);
                             locationMap.put("civic", civic);
@@ -249,5 +251,105 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void getAddressFromCoordinates(String email, String firstName, String lastName, double latitude, double longitude) {
+        // Configura Retrofit
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.opencagedata.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        OpenCageService service = retrofit.create(OpenCageService.class);
+        String coordinates = latitude + "," + longitude;
+
+        // Effettua la chiamata API
+        Call<OpenCageResponse> call = service.reverseGeocode(coordinates, API_KEY);
+        call.enqueue(new retrofit2.Callback<OpenCageResponse>() {
+            @Override
+            public void onResponse(Call<OpenCageResponse> call, retrofit2.Response<OpenCageResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    OpenCageResponse.Result result = response.body().results.get(0);
+
+                    // Estrai i dettagli dell'indirizzo
+                    String city = result.components.city;
+                    String road = result.components.road;
+                    String houseNumber = result.components.houseNumber;
+                    String postcode = result.components.postcode;
+                    String province = result.components.state; // Estrai la provincia
+
+                    // Salva nel database Firebase
+                    saveUserToDatabase(email, firstName, lastName, city, road, houseNumber, postcode, province);
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Errore nel recupero dell'indirizzo", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OpenCageResponse> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "Errore di rete: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveUserToDatabase(String email, String firstName, String lastName, String city, String road, String houseNumber, String postcode, String province) {
+        String userId = auth.getCurrentUser().getUid();
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("email", email);
+        userData.put("firstName", firstName);
+        userData.put("lastName", lastName);
+
+        Map<String, String> locationMap = new HashMap<>();
+        locationMap.put("city", city);
+        locationMap.put("address", road);
+        locationMap.put("civic", houseNumber);
+        locationMap.put("cap", postcode);
+        locationMap.put("province", province);
+
+        userData.put("location", locationMap);
+
+        db.collection("users").document(userId)
+                .set(userData)
+                .addOnSuccessListener(aVoid -> Toast.makeText(RegisterActivity.this, "Registrazione completata!", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(RegisterActivity.this, "Errore durante il salvataggio dei dati.", Toast.LENGTH_SHORT).show());
+    }
+
+    public interface OpenCageService {
+        @GET("geocode/v1/json")
+        Call<OpenCageResponse> reverseGeocode(
+                @Query("q") String coordinates,
+                @Query("key") String apiKey
+        );
+    }
+
+    public static class OpenCageResponse {
+        @SerializedName("results")
+        public List<Result> results;
+
+        public static class Result {
+            @SerializedName("formatted")
+            public String formatted;
+
+            @SerializedName("components")
+            public Components components;
+        }
+
+        public static class Components {
+            @SerializedName("city")
+            public String city;
+
+            @SerializedName("road")
+            public String road;
+
+            @SerializedName("house_number")
+            public String houseNumber;
+
+            @SerializedName("postcode")
+            public String postcode;
+
+            @SerializedName("state")
+            public String state; // Questo rappresenta la provincia
+        }
     }
 }
