@@ -81,7 +81,7 @@ public class UseWaterActivity extends AppCompatActivity {
                 if (updatedContainer != null) {
                     // Aggiorna i dati nell'interfaccia
                     nameTextView.setText(updatedContainer.getName());
-                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
+                    totalVolumeTextView.setText("Volume totale: " + String.format("%.2f", updatedContainer.getTotalVolume()) + " L");
                     currentQuantity = updatedContainer.getCurrentVolume();
                     currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", currentQuantity) + " L");
                 }
@@ -100,9 +100,9 @@ public class UseWaterActivity extends AppCompatActivity {
             containerId = container.getId();  // Salva l'ID del contenitore per la modifica o eliminazione
 
             nameTextView.setText("Nome: " + container.getName());
-            totalVolumeTextView.setText("Quantità totale: " + container.getTotalVolume() + " L");
+            totalVolumeTextView.setText("Quantità totale: " + String.format("%.2f", container.getTotalVolume()) + " L");
             currentQuantity = container.getCurrentVolume(); //litri
-            currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", currentQuantity) +"L");
+            currentQuantityTextView.setText("Quantità attuale: " + String.format("%.2f", currentQuantity) +" L");
         }
 
         resetWaterButton = findViewById(R.id.resetWaterButton);

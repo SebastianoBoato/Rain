@@ -74,13 +74,13 @@ public class ContainersFragment extends Fragment {
         // Configura RecyclerView
         containerList = new ArrayList<>();
 
+        // Carica i contenitori da Firebase
+        loadContainers();
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // Crea l'adapter e imposta il listener
         adapter = new ContainerAdapter(containerList, getContext(), "ContainerDetailActivity");
         recyclerView.setAdapter(adapter);
-
-        // Carica i contenitori da Firebase
-        loadContainers();
 
         // Pulsante per aggiungere un nuovo contenitore
         addContainerButton.setOnClickListener(v -> {

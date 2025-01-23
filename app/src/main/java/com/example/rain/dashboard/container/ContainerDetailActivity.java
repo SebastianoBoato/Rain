@@ -72,26 +72,23 @@ public class ContainerDetailActivity extends AppCompatActivity {
             nameTextView.setText(container.getName());
             shapeTextView.setText("Forma: " + container.getShape());
             param1TextView.setText("Parametro 1: " + container.getParam1() + " cm");
-            param2TextView.setText(container.getParam2() != null ? "Parametro 2: " + container.getParam2() + " cm" : "Parametro 2: Non esistente");
+            if(container.getParam2()!=null){
+                param2TextView.setVisibility(View.VISIBLE);
+                param2TextView.setText("Parametro 2: " + container.getParam2() + " cm");
+            }
             heightTextView.setText("Altezza: " + container.getHeight() + " cm");
             if(container.getRoofArea() != null){
                 roofAreaTextView.setVisibility(View.VISIBLE);
                 roofAreaTextView.setText("Area del tetto: " + container.getRoofArea() + " m");
             }
             areaTextView.setText("Area di base: " + container.getBaseArea() + " cm");
-            totalVolumeTextView.setText("Volume totale: " + container.getTotalVolume() + " L");
-            currentQuantityTextView.setText("Quantità attuale: " + container.getCurrentVolume() + " L");
+            totalVolumeTextView.setText(String.format("Volume totale: %.2f L", container.getTotalVolume()));
+            currentQuantityTextView.setText(String.format("Quantità attuale: %.2f L", container.getCurrentVolume()));
         }
 
         // Imposta un listener in tempo reale sul documento del container
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        /*if (user == null) {
-            Toast.makeText(this, "Errore: Utente non autenticato.", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }*/
 
         // Percorso al documento del container
         DocumentReference containerRef = db.collection("users")
@@ -117,7 +114,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
                     heightTextView.setText("Altezza: " + updatedContainer.getHeight() + " cm");
                     roofAreaTextView.setText("Area del tetto: " + updatedContainer.getRoofArea() + " m");
                     areaTextView.setText("Area di base: " + updatedContainer.getBaseArea() + " cm");
-                    totalVolumeTextView.setText("Volume totale: " + updatedContainer.getTotalVolume() + " L");
+                    totalVolumeTextView.setText(String.format("Volume totale: %.2f L", updatedContainer.getTotalVolume()));
                     currentQuantityTextView.setText(String.format("Quantità attuale: %.2f", updatedContainer.getCurrentVolume()) + "L");
                 }
             }

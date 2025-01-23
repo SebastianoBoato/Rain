@@ -41,7 +41,7 @@
                 android:id="@+id/containerNameLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nome Serbatoio"
+                android:text="Nome Contenitore"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"
@@ -50,7 +50,7 @@
                 android:id="@+id/containerName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nome del serbatoio"
+                android:hint="Nome del contenitore"
                 android:inputType="text"
                 android:textColor="@color/black"
                 android:layout_marginTop="16dp" />
