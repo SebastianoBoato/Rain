@@ -41,10 +41,7 @@ public class AutoFillContainersBroadcastReceiver extends BroadcastReceiver {
                                           DailyWeatherItem tomorrowWeather,
                                           DailyWeatherItem afterTomorrowWeather) {
 
-                        WeatherUtils.autoFillContainers(db, user, todayWeather);
-                        NotificationUtils.sendNotification(context,
-                                "Volume di acqua aggiornato",
-                                "Il volume di acqua dei tuoi contenitori è stato aggiornato sulla base della quantità piovuta oggi (" + todayWeather.getPrecip() + "mm)");
+                        WeatherUtils.autoFillContainers(db, user, todayWeather, context);
                     }
 
                     @Override

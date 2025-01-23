@@ -84,7 +84,7 @@ public class HistoryFragment extends Fragment {
                             xAxis.setDrawGridLines(false); // Nasconde le linee della griglia sull'asse X
                             xAxis.setTextColor(Color.BLACK); // Colore del testo delle etichette
                             xAxis.setTextSize(12f); // Dimensione del testo delle etichette
-                            xAxis.setLabelRotationAngle(40f); // Ruota le etichette di 45 gradi
+                            xAxis.setLabelRotationAngle(40f); // Ruota le etichette di 40 gradi
 
                             // Configura l'asse Y
                             YAxis leftAxis = binding.collectionChart.getAxisLeft();
@@ -100,7 +100,7 @@ public class HistoryFragment extends Fragment {
                             binding.collectionChart.getLegend().setEnabled(false); // Rimuovi la legenda
                             binding.collectionChart.setDrawBorders(false); // Non disegnare bordi attorno al grafico
                             binding.collectionChart.setDrawGridBackground(false); // Nessuno sfondo di griglia
-                            binding.collectionChart.setExtraOffsets(10, 10, 30, 45); // Margini extra per evitare sovrapposizioni
+                            binding.collectionChart.setExtraOffsets(10, 10, 30, 55); // Margini extra per evitare sovrapposizioni
 
                             binding.collectionChart.invalidate();
                         }
@@ -149,7 +149,7 @@ public class HistoryFragment extends Fragment {
                             xAxis.setDrawGridLines(false); // Nasconde le linee della griglia sull'asse X
                             xAxis.setTextColor(Color.BLACK); // Colore del testo delle etichette
                             xAxis.setTextSize(12f); // Dimensione del testo delle etichette
-                            xAxis.setLabelRotationAngle(40f); // Ruota le etichette di 45 gradi
+                            xAxis.setLabelRotationAngle(40f); // Ruota le etichette di 40 gradi
 
                             // Configura l'asse Y
                             YAxis leftAxis = binding.usageChart.getAxisLeft();
@@ -165,7 +165,7 @@ public class HistoryFragment extends Fragment {
                             binding.usageChart.getLegend().setEnabled(false); // Rimuovi la legenda
                             binding.usageChart.setDrawBorders(false); // Non disegnare bordi attorno al grafico
                             binding.usageChart.setDrawGridBackground(false); // Nessuno sfondo di griglia
-                            binding.usageChart.setExtraOffsets(10, 10, 30, 45); // Margini extra per evitare sovrapposizioni
+                            binding.usageChart.setExtraOffsets(10, 10, 30, 55); // Margini extra per evitare sovrapposizioni
 
                             binding.usageChart.invalidate();
                         }

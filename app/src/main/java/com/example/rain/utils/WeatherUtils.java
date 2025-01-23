@@ -1,5 +1,7 @@
 package com.example.rain.utils;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.android.volley.Request;
@@ -248,7 +250,7 @@ public class WeatherUtils {
         fillingPredictionItems.add(new FillingPredictionItem(containerName, containerTotalVolume, containerCurrentVolume, containerVolumeIncrease, containerPredictionVolume, containerShape));
     }
 
-    public static void autoFillContainers (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather) {
+    public static void autoFillContainers (FirebaseFirestore db, FirebaseUser user, DailyWeatherItem todayWeather, Context context) {
 
         // TODO: magari manda una notifica se qualcosa non va a buon fine
 
@@ -270,9 +272,9 @@ public class WeatherUtils {
                         collection_historyRef.whereEqualTo("date", currentDate).get()
                                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override
-                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots_collectionHistory) {
 
-                                        if (queryDocumentSnapshots.isEmpty()) {
+                                        if (queryDocumentSnapshots_collectionHistory.isEmpty()) {
                                             Map<String, Object> collectedVolume = new HashMap<>();
                                             collectedVolume.put("date", currentDate);
                                             collectedVolume.put("collectedVolume", 0);
@@ -308,6 +310,10 @@ public class WeatherUtils {
                                                             containerDocRef.update("currentVolume", containerPredictionVolume);
 
                                                             collectedVolumeDocRef.update("collectedVolume", totalCollectedVolume);
+
+                                                            NotificationUtils.sendNotification(context,
+                                                                    "Volume di acqua aggiornato",
+                                                                    "Il volume di acqua dei tuoi contenitori è stato aggiornato sulla base della quantità piovuta oggi (" + todayWeather.getPrecip() + "mm)");
                                                         }
                                                     }
                                                 }
