@@ -1,6 +1,6 @@
 # Rain
 
-# Rainwater Collection and Usage Tracker
+## Rainwater Collection and Usage Tracker
 
 The application is designed to help users significantly reduce their water consumption by **monitoring and tracking the collection and usage of rainwater**. It provides practical tips on how to use the collected water effectively and displays trends for water collection and usage over time.  
 
