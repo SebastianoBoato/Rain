@@ -46,95 +46,107 @@
                 android:gravity="center_vertical" />  <!-- Centra il testo verticalmente accanto al bottone -->
         </LinearLayout>
 
-        <!-- Forma -->
-        <TextView
-            android:id="@+id/shape"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Forma"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/name"
-            android:layout_marginTop="16dp"/>
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bottom_nav_background"
+            android:elevation="8dp">
 
-        <!-- Parametro 1 -->
-        <TextView
-            android:id="@+id/param1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Parametro 1"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/shape"
-            android:layout_marginTop="8dp"/>
+            <!-- Forma -->
+            <TextView
+                android:id="@+id/shape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forma"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/name"
+                android:layout_marginTop="16dp"/>
 
-        <!-- Parametro 2 -->
-        <TextView
-            android:id="@+id/param2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Parametro 2"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/param1"
-            android:layout_marginTop="8dp"/>
+            <!-- Parametro 1 -->
+            <TextView
+                android:id="@+id/param1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parametro 1"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/shape"
+                android:layout_marginTop="8dp"/>
 
-        <!-- Altezza -->
-        <TextView
-            android:id="@+id/height"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Altezza"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/param2"
-            android:layout_marginTop="8dp"/>
+            <!-- Parametro 2 -->
+            <TextView
+                android:id="@+id/param2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Parametro 2"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/param1"
+                android:layout_marginTop="8dp"/>
 
-        <!-- Area del tetto -->
-        <TextView
-            android:id="@+id/roofArea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Area del tetto"
-            android:visibility="gone"
-            android:textSize="16sp"
-            android:layout_below="@id/height"
-            android:layout_marginTop="8dp"/>
+            <!-- Altezza -->
+            <TextView
+                android:id="@+id/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Altezza"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/param2"
+                android:layout_marginTop="8dp"/>
 
-        <!-- Area della base -->
-        <TextView
-            android:id="@+id/baseArea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Area della base"
-            android:textSize="18sp"
-            android:visibility="gone"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/roofArea"
-            android:layout_marginTop="8dp"/>
+            <!-- Area del tetto -->
+            <TextView
+                android:id="@+id/roofArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Area del tetto"
+                android:visibility="gone"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/height"
+                android:layout_marginTop="8dp"/>
 
-        <!-- Volume totale -->
-        <TextView
-            android:id="@+id/totalVolume"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Volume totale"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/baseArea"
-            android:layout_marginTop="8dp"/>
+            <!-- Area della base -->
+            <TextView
+                android:id="@+id/baseArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Area della base"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/roofArea"
+                android:layout_marginTop="8dp"/>
 
-        <!-- Quantità attuale -->
-        <TextView
-            android:id="@+id/currentQuantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quantità attuale"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_below="@id/currentVolume"
-            android:layout_marginTop="8dp"/>
+            <!-- Volume totale -->
+            <TextView
+                android:id="@+id/totalVolume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Volume totale"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/baseArea"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Quantità attuale -->
+            <TextView
+                android:id="@+id/currentQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantità attuale"
+                android:textSize="18sp"
+                android:layout_marginStart="16dp"
+                android:layout_below="@id/currentVolume"
+                android:layout_marginTop="8dp"/>
+
+        </LinearLayout>
 
         <!-- Pulsante per modificare nome -->
         <Button

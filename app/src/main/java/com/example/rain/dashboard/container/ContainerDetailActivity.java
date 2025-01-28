@@ -79,7 +79,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
             heightTextView.setText("Altezza: " + container.getHeight() + " cm");
             if(container.getRoofArea() != null){
                 roofAreaTextView.setVisibility(View.VISIBLE);
-                roofAreaTextView.setText("Area del tetto: " + container.getRoofArea() + " m");
+                roofAreaTextView.setText("Area del tetto: " + container.getRoofArea() + " mq");
             }
             areaTextView.setText("Area di base: " + container.getBaseArea() + " cm");
             totalVolumeTextView.setText(String.format("Volume totale: %.2f L", container.getTotalVolume()));
