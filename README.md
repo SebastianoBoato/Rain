@@ -2,7 +2,7 @@
   <img src="app/src/main/res/drawable/logorain.jpg" alt="Rain" width="100" align="center">
 </p>
 
-# Rain
+<h1 align="center">Rain</h1>
 
 ## Rainwater Collection and Usage Tracker
 
