@@ -112,7 +112,7 @@ public class ContainerDetailActivity extends AppCompatActivity {
                     param1TextView.setText("Parametro 1: " + updatedContainer.getParam1() + " cm");
                     param2TextView.setText(updatedContainer.getParam2() != null ? "Parametro 2: " + updatedContainer.getParam2() + " cm" : "Parametro 2: Non esistente");
                     heightTextView.setText("Altezza: " + updatedContainer.getHeight() + " cm");
-                    roofAreaTextView.setText("Area del tetto: " + updatedContainer.getRoofArea() + " m");
+                    roofAreaTextView.setText("Area del tetto: " + updatedContainer.getRoofArea() + " mq");
                     areaTextView.setText("Area di base: " + updatedContainer.getBaseArea() + " cm");
                     totalVolumeTextView.setText(String.format("Volume totale: %.2f L", updatedContainer.getTotalVolume()));
                     currentQuantityTextView.setText(String.format("Quantità attuale: %.2f", updatedContainer.getCurrentVolume()) + "L");
