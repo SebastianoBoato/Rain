@@ -181,8 +181,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showPrivacyDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Informativa Privacy")
-                .setMessage("Questa è una breve informativa sulla privacy. Assicuriamo che i tuoi dati saranno trattati nel rispetto delle normative vigenti.")
+                .setTitle("Informativa sulla Privacy")
+                .setMessage("La tua privacy è importante per noi. I dati personali raccolti dalla nostra applicazione vengono utilizzati esclusivamente per la gestione del tuo account e per offrirti un servizio efficiente nella raccolta dell’acqua piovana.\n" +
+                        "\n" +
+                        "Le informazioni vengono archiviate e protette tramite Firebase, un sistema sicuro di Google che garantisce la crittografia e il rispetto delle normative sulla privacy. Non condividiamo i tuoi dati con terze parti, salvo obblighi di legge.\n" +
+                        "\n" +
+                        "Utilizzando l’app, accetti il trattamento delle tue informazioni come descritto.")
                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                 .show();
     }

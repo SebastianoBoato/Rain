@@ -173,6 +173,13 @@
                     android:inputType="number"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <CheckBox
+                android:id="@+id/privacyCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:linksClickable="true"/>
+
             <!-- Bottone di Registrazione -->
             <Button
                 android:id="@+id/register_button"

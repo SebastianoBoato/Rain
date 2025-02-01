@@ -1,10 +1,18 @@
 package com.example.rain.login;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -13,8 +21,10 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -87,6 +97,10 @@ public class RegisterActivity extends AppCompatActivity {
             toggleLocationFieldsVisibility(isChecked);
         });
 
+        // CheckBox dell'informativa sulla privacy
+        CheckBox privacyCheckBox = findViewById(R.id.privacyCheckBox);
+        setupPrivacyCheckbox(privacyCheckBox);
+
         goToLoginButton.setOnClickListener(v -> {
             // Torna alla schermata di login
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -114,6 +128,46 @@ public class RegisterActivity extends AppCompatActivity {
             findViewById(R.id.civic_layout).setVisibility(View.VISIBLE);
             findViewById(R.id.cap_layout).setVisibility(View.VISIBLE);
         }
+    }
+
+    //Gestisce il checkbox per l'informativa sulla privacy
+    private void setupPrivacyCheckbox(CheckBox checkBox) {
+        // Testo completo
+        String testoCompleto = "Accetto l'Informativa sulla Privacy e i Termini di Servizio";
+        SpannableString spannableString = new SpannableString(testoCompleto);
+
+        // Trova l'indice della parola "Informativa sulla Privacy"
+        int start = testoCompleto.indexOf("Informativa sulla Privacy");
+        int end = start + "Informativa sulla Privacy".length();
+
+        // Crea il ClickableSpan per mostrare l'AlertDialog
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                Context context = widget.getContext();
+                new AlertDialog.Builder(context)
+                        .setTitle("Informativa sulla Privacy")
+                        .setMessage("La tua privacy è importante per noi. I dati personali raccolti dalla nostra applicazione vengono utilizzati esclusivamente per la gestione del tuo account e per offrirti un servizio efficiente nella raccolta dell’acqua piovana.\n" +
+                                "\n" +
+                                "Le informazioni vengono archiviate e protette tramite Firebase, un sistema sicuro di Google che garantisce la crittografia e il rispetto delle normative sulla privacy. Non condividiamo i tuoi dati con terze parti, salvo obblighi di legge.\n" +
+                                "\n" +
+                                "Utilizzando l’app, accetti il trattamento delle tue informazioni come descritto.")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
+        };
+
+        // Applica lo stile cliccabile e il colore al testo
+        spannableString.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        int color = ContextCompat.getColor(this, R.color.blue_accent);
+        spannableString.setSpan(new android.text.style.ForegroundColorSpan(color), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Imposta il testo e abilita il clic
+        checkBox.setText(spannableString);
+        checkBox.setMovementMethod(LinkMovementMethod.getInstance());
+
+        // Assicura che il CheckBox non sia selezionato di default
+        checkBox.setChecked(false);
     }
 
     private void registerUser() {
